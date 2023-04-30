@@ -6,7 +6,7 @@ namespace TextRecognizer
 {
     public class NeuronWeb
     {
-        public Neuron[] neurons;
+        public Neuron[] neurons;        
 
         public void NamingNeurons()
         {
@@ -109,6 +109,12 @@ namespace TextRecognizer
             FindMatches();
             Sum();
             return GetAGuess();
+        }
+
+        public void Train(string trueName, string falseName)
+        {
+            Trainer.IncrementWeight(trueName, neurons);
+            Trainer.DecrementWeight(falseName, neurons);
         }
     }
 }

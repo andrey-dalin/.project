@@ -40,7 +40,7 @@ namespace TextRecognizer
             neuronWeb.SetResolutionForEveryone(resolutionX, resolutionY);
 
             
-
+            
 
             
         }
