@@ -14,7 +14,6 @@ namespace TextRecognizer
         public int[,] matches;
         public int[,] weight;
         public int[,] input;
-        public int limit;
         public int sumOfMatches;
         public bool hasPath;
 
