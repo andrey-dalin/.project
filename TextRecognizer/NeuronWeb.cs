@@ -6,10 +6,14 @@ namespace TextRecognizer
 {
     public class NeuronWeb
     {
-        public Neuron[] Neurons;
+        public static Neuron[] Neurons;
 
         public static int ResolutionX;
         public static int ResolutionY;
+
+        public SensoryLayer SensoryLayer = new SensoryLayer(Neurons);
+        public AssociativeLayer AssociativeLayer = new AssociativeLayer(Neurons);
+        public ReactingLayer ReactingLayer = new ReactingLayer(Neurons);
 
         public void NamingNeurons()
         {
@@ -39,46 +43,17 @@ namespace TextRecognizer
 
        
 
-        public void Sum()
-        {
-            //прибавляем в сумме совпадений все совпадающие пиксели
-            for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < Neurons[0].weight.GetLength(0); x++)
-                    for (int y = 0; y < Neurons[0].weight.Rank; y++)
-                    {
-                        Neurons[i].sumOfMatches += Neurons[i].matches[y, x];
-                    }
-        }
+        
 
-        public string GetAGuess()
-        {
-            //находим нейрон, в котором максимальная сумма совпадений
-            int numberInArray;
-            int maxBlackInSums;
-            int[] sums = new int[Neurons.Length];
-
-            //создаём массив с суммами совпадений
-            for (int i = 0; i < Neurons.Length; i++)
-            {
-                sums[i] = Neurons[i].sumOfMatches;
-            }
-
-            //ищем максимальную сумму совпадений, чем ближе к 0 тем лучше, так как черный цвет стремиться к нулю
-            maxBlackInSums = sums.Min();
-
-            //находим номер индекса в массиве с максимальной суммой совпадений
-            numberInArray = Array.FindIndex(sums, (int match) => match == maxBlackInSums);
-
-
-            return Neurons[numberInArray].name;
-
-        }
+        
         public string Recognize(Bitmap input)
         {
-            SetInput(input);
-            FindMatches();
-            Sum();
-            return GetAGuess();
+            SensoryLayer.SetInput(input);
+            AssociativeLayer.FindMatches();
+            ReactingLayer.Sum();
+            return ReactingLayer.GetAGuess();
+
+
         }
 
         public void Train(string trueName, string falseName)
