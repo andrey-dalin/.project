@@ -108,8 +108,11 @@ namespace TextRecognizer
         }
         public string Recognize(Bitmap input)
         {
+            //Сенсорный слой
             SetInput(input);
+            //Ассоциативный слой
             FindMatches();
+            //Реагирующий слой
             Sum();
             return GetAGuess();
         }
