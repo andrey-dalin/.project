@@ -40,9 +40,16 @@ namespace TextRecognizer
             input = new int[height, width];
         }
 
-        public static bool IsWhite(int pixel)
+        public static int IsWhite(int pixel)
         {
-            return pixel > MyColors.NearWhite;
+            if (pixel > MyColors.NearWhite)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1;
+            }
         }
     }
 }

@@ -35,42 +35,9 @@ namespace TextRecognizer
             foreach (Neuron neuron in Neurons) neuron.SetResolution(ResolutionX, ResolutionY);
         }
 
-        public void SetInput(Bitmap input)
-        {
-            for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < input.Width; x++)
-                    for (int y = 0; y < input.Height; y++)
-                    {
-                        int colorOfPixel = Convert.ToInt32(input.GetPixel(x, y).R);
-                        Neurons[i].input[y, x] = colorOfPixel;
-                    }
+        
 
-
-        }
-
-        public void FindMatches()
-        {
-            //Из 2 статьи масштабирование
-            for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < Neurons[0].weight.GetLength(0); x++)
-                    for (int y = 0; y < Neurons[0].weight.Rank; y++)
-                    {
-                        int input = Neurons[i].input[y, x];
-                        int match = Neurons[i].matches[y, x];
-                        int weight = Neurons[i].weight[y, x];
-
-                        //если пиксель белый в входном пикселе, то убираем. Если черный, то в совпадения пишем текущий вес, присвоенный пикселю
-                        if (Neuron.IsWhite(input))
-                        {
-                            match = MyColors.White;
-                        }
-                        else
-                        {
-                            match = Neurons[i].weight[y, x];
-                        }
-                    }
-
-        }
+       
 
         public void Sum()
         {
