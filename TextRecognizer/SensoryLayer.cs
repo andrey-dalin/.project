@@ -9,19 +9,19 @@ namespace TextRecognizer
 {
     public class SensoryLayer
     {
-        private Neuron[] neurons;
-        public SensoryLayer(Neuron[] neurons) 
+        private NeuronWeb neuronWeb;
+        public SensoryLayer(NeuronWeb neuronWeb) 
         {
-            this.neurons = neurons;
+            this.neuronWeb = neuronWeb;
         }
         public void SetInput(Bitmap input)
         {
-            for (int i = 0; i < neurons.Length; i++)
+            for (int i = 0; i < neuronWeb.Neurons.Length; i++)
                 for (int x = 0; x < input.Width; x++)
                     for (int y = 0; y < input.Height; y++)
                     {
                         int colorOfPixel = Convert.ToInt32(input.GetPixel(x, y).R);
-                        neurons[i].input[y, x] = Neuron.IsWhite(neurons[i].input[y, x]);
+                        neuronWeb.Neurons[i].input[y, x] = Neuron.IsWhite(neuronWeb.Neurons[i].input[y, x]);
                     }
 
 

@@ -8,46 +8,29 @@ namespace TextRecognizer
 {
     public class ReactingLayer
     {
-        private Neuron[] neurons;
+        private NeuronWeb neuronWeb;
 
-        public ReactingLayer(Neuron[] neurons)
+        public ReactingLayer(NeuronWeb neuronWeb) 
         {
-            this.neurons = neurons;
+            this.neuronWeb = neuronWeb;
         }
 
-        public void Sum()
+        public void FindMatches()
         {
-            //прибавляем в сумме совпадений все совпадающие пиксели
-            for (int i = 0; i < neurons.Length; i++)
-                for (int x = 0; x < neurons[0].weight.GetLength(0); x++)
-                    for (int y = 0; y < neurons[0].weight.Rank; y++)
+            //Из 2 статьи масштабирование
+            for (int i = 0; i < neuronWeb.Neurons.Length; i++)
+                for (int x = 0; x < neuronWeb.Neurons[0].weight.GetLength(0); x++)
+                    for (int y = 0; y < neuronWeb.Neurons[0].weight.Rank; y++)
                     {
-                        neurons[i].sumOfMatches += neurons[i].matches[y, x];
+                        int input = neuronWeb.Neurons[i].input[y, x];                        
+                        int weight = neuronWeb.Neurons[i].weight[y, x];
+
+                        //если пиксель белый в входном пикселе, то убираем. Если черный, то в совпадения пишем текущий вес, присвоенный пикселю
+                        neuronWeb.Neurons[i].matches[y, x] = input * weight;
+
                     }
-        }
-
-        public string GetAGuess()
-        {
-            //находим нейрон, в котором максимальная сумма совпадений
-            int numberInArray;
-            int maxBlackInSums;
-            int[] sums = new int[neurons.Length];
-
-            //создаём массив с суммами совпадений
-            for (int i = 0; i < neurons.Length; i++)
-            {
-                sums[i] = neurons[i].sumOfMatches;
-            }
-
-            //ищем максимальную сумму совпадений, чем ближе к 0 тем лучше, так как черный цвет стремиться к нулю
-            maxBlackInSums = sums.Min();
-
-            //находим номер индекса в массиве с максимальной суммой совпадений
-            numberInArray = Array.FindIndex(sums, (int match) => match == maxBlackInSums);
-
-
-            return neurons[numberInArray].name;
 
         }
+
     }
 }
