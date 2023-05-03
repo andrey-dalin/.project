@@ -16,6 +16,9 @@ namespace TextRecognizer
         [STAThread]
         static void Main()
         {
+            NeuronWeb.ResolutionX = 30;
+            NeuronWeb.ResolutionY = 30;
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
@@ -35,8 +38,7 @@ namespace TextRecognizer
             neuronWeb.MakePathForEveryone(pathOfFolder);
 
             //Задаём разрешение 
-            neuronWeb.ResolutionX = 30;
-            neuronWeb.ResolutionY = 30;
+            
 
             neuronWeb.SetResolutionForEveryone();
 

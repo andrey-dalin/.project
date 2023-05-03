@@ -13,20 +13,20 @@ namespace TextRecognizer
         private int index = 0;
 
         private Point[] points;
-        public ArrayPoints(int width, int height) 
+        public ArrayPoints(int size) 
         {
-            points = new Point[width * height];
+            points = new Point[size];
         }
 
         public void SetPoint(int x, int y)
         {
-            if (index < points.Length)
+            if (index >= points.Length)
             {
+                index = 0;
+            }
                 points[index] = new Point(x, y);
                 index++;
-            }
-
-            index = 0;
+            
         }
 
         public void ResetPoints()
