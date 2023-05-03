@@ -20,14 +20,12 @@ namespace TextRecognizer
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
-            int resolutionX = 30;
-            int resolutionY = 30;
             int numberOfRussianLetters = 33;
             string pathOfFolder = "A:\\Andrey\\.project\\TextRecognizer\\resource\\letters";
 
             NeuronWeb neuronWeb = new NeuronWeb();
 
-            neuronWeb.neurons = new Neuron[numberOfRussianLetters];
+            neuronWeb.Neurons = new Neuron[numberOfRussianLetters];
 
 
             //Создаём имя для каждого нейрона
@@ -37,7 +35,10 @@ namespace TextRecognizer
             neuronWeb.MakePathForEveryone(pathOfFolder);
 
             //Задаём разрешение 
-            neuronWeb.SetResolutionForEveryone(resolutionX, resolutionY);
+            neuronWeb.ResolutionX = 30;
+            neuronWeb.ResolutionY = 30;
+
+            neuronWeb.SetResolutionForEveryone();
 
             
             

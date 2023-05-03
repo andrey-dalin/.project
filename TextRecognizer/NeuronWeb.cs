@@ -6,7 +6,10 @@ namespace TextRecognizer
 {
     public class NeuronWeb
     {
-        public Neuron[] neurons;        
+        public Neuron[] Neurons;
+
+        public static int ResolutionX;
+        public static int ResolutionY;
 
         public void NamingNeurons()
         {
@@ -14,32 +17,32 @@ namespace TextRecognizer
             {
                 if (i == 'ж')
                 {
-                    this.neurons[j] = new Neuron("ё");
+                    this.Neurons[j] = new Neuron("ё");
                     j++;
                 }
                 string symbol = Convert.ToChar(i).ToString();
-                this.neurons[j] = new Neuron(symbol);
+                this.Neurons[j] = new Neuron(symbol);
             }
         }
 
         public void MakePathForEveryone(string pathOfFolder)
         {
-            foreach (Neuron neuron in neurons) neuron.MakePathBMPOfWeight(neuron.name, pathOfFolder);
+            foreach (Neuron neuron in Neurons) neuron.MakePathBMPOfWeight(neuron.name, pathOfFolder);
         }
 
-        public void SetResolutionForEveryone(int width, int height)
+        public void SetResolutionForEveryone()
         {
-            foreach (Neuron neuron in neurons) neuron.SetResolution(width, height);
+            foreach (Neuron neuron in Neurons) neuron.SetResolution(ResolutionX, ResolutionY);
         }
 
         public void SetInput(Bitmap input)
         {
-            for (int i = 0; i < neurons.Length; i++)
+            for (int i = 0; i < Neurons.Length; i++)
                 for (int x = 0; x < input.Width; x++)
                     for (int y = 0; y < input.Height; y++)
                     {
                         int colorOfPixel = Convert.ToInt32(input.GetPixel(x, y).R);
-                        neurons[i].input[y, x] = colorOfPixel;
+                        Neurons[i].input[y, x] = colorOfPixel;
                     }
 
 
@@ -48,13 +51,13 @@ namespace TextRecognizer
         public void FindMatches()
         {
             //Из 2 статьи масштабирование
-            for (int i = 0; i < neurons.Length; i++)
-                for (int x = 0; x < neurons[0].weight.GetLength(0); x++)
-                    for (int y = 0; y < neurons[0].weight.Rank; y++)
+            for (int i = 0; i < Neurons.Length; i++)
+                for (int x = 0; x < Neurons[0].weight.GetLength(0); x++)
+                    for (int y = 0; y < Neurons[0].weight.Rank; y++)
                     {
-                        int input = neurons[i].input[y, x];
-                        int match = neurons[i].matches[y, x];
-                        int weight = neurons[i].weight[y, x];
+                        int input = Neurons[i].input[y, x];
+                        int match = Neurons[i].matches[y, x];
+                        int weight = Neurons[i].weight[y, x];
 
                         //если пиксель белый в входном пикселе, то убираем. Если черный, то в совпадения пишем текущий вес, присвоенный пикселю
                         if (Neuron.IsWhite(input))
@@ -63,7 +66,7 @@ namespace TextRecognizer
                         }
                         else
                         {
-                            match = neurons[i].weight[y, x];
+                            match = Neurons[i].weight[y, x];
                         }
                     }
 
@@ -72,11 +75,11 @@ namespace TextRecognizer
         public void Sum()
         {
             //прибавляем в сумме совпадений все совпадающие пиксели
-            for (int i = 0; i < neurons.Length; i++)
-                for (int x = 0; x < neurons[0].weight.GetLength(0); x++)
-                    for (int y = 0; y < neurons[0].weight.Rank; y++)
+            for (int i = 0; i < Neurons.Length; i++)
+                for (int x = 0; x < Neurons[0].weight.GetLength(0); x++)
+                    for (int y = 0; y < Neurons[0].weight.Rank; y++)
                     {
-                        neurons[i].sumOfMatches += neurons[i].matches[y, x];
+                        Neurons[i].sumOfMatches += Neurons[i].matches[y, x];
                     }
         }
 
@@ -85,12 +88,12 @@ namespace TextRecognizer
             //находим нейрон, в котором максимальная сумма совпадений
             int numberInArray;
             int maxBlackInSums;
-            int[] sums = new int[neurons.Length];
+            int[] sums = new int[Neurons.Length];
 
             //создаём массив с суммами совпадений
-            for (int i = 0; i < neurons.Length; i++)
+            for (int i = 0; i < Neurons.Length; i++)
             {
-                sums[i] = neurons[i].sumOfMatches;
+                sums[i] = Neurons[i].sumOfMatches;
             }
 
             //ищем максимальную сумму совпадений, чем ближе к 0 тем лучше, так как черный цвет стремиться к нулю
@@ -100,7 +103,7 @@ namespace TextRecognizer
             numberInArray = Array.FindIndex(sums, (int match) => match == maxBlackInSums);
 
 
-            return neurons[numberInArray].name;
+            return Neurons[numberInArray].name;
 
         }
         public string Recognize(Bitmap input)
@@ -113,8 +116,8 @@ namespace TextRecognizer
 
         public void Train(string trueName, string falseName)
         {
-            Trainer.IncrementWeight(trueName, neurons);
-            Trainer.DecrementWeight(falseName, neurons);
+            Trainer.IncrementWeight(trueName, Neurons);
+            Trainer.DecrementWeight(falseName, Neurons);
         }
     }
 }
