@@ -9,6 +9,8 @@ namespace TextRecognizer
     public static class Trainer
     {
         //можно настраивать точность обучения
+        public static int Accuracy = 10;
+
         public static void DecrementWeight(string name, Neuron[] neurons)
         {
             int indexOfNeuron = Array.FindIndex(neurons, x => x.name == name);
@@ -17,7 +19,7 @@ namespace TextRecognizer
                 for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1);  x++)
                 {
                     neurons[indexOfNeuron].weight[y, x] += 
-                        (int)(neurons[indexOfNeuron].input[y, x] / 2);
+                        (int)(neurons[indexOfNeuron].input[y, x] / Accuracy);
                 }
         }
 
@@ -29,7 +31,7 @@ namespace TextRecognizer
                 for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1); x++)
                 {
                     neurons[indexOfNeuron].weight[y, x] -=
-                        (int)(neurons[indexOfNeuron].input[y, x] / 2);
+                        (int)(neurons[indexOfNeuron].input[y, x] / Accuracy);
                 }
         }
     }
