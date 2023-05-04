@@ -18,8 +18,13 @@ namespace TextRecognizer
             for (int y = 0; y < neurons[indexOfNeuron].weight.GetLength(0); y++) 
                 for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1);  x++)
                 {
-                    neurons[indexOfNeuron].weight[y, x] += 
+                    neurons[indexOfNeuron].weight[y, x] -= 
                         (int)(neurons[indexOfNeuron].input[y, x] / Accuracy);
+
+                    if (neurons[indexOfNeuron].weight[y, x] <= 0)
+                    {
+                        neurons[indexOfNeuron].weight[y, x] = 0;
+                    }
                 }
         }
 
@@ -30,8 +35,13 @@ namespace TextRecognizer
             for (int y = 0; y < neurons[indexOfNeuron].weight.GetLength(0); y++)
                 for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1); x++)
                 {
-                    neurons[indexOfNeuron].weight[y, x] -=
+                    neurons[indexOfNeuron].weight[y, x] +=
                         (int)(neurons[indexOfNeuron].input[y, x] / Accuracy);
+
+                    if (neurons[indexOfNeuron].weight[y, x] >= 1)
+                    {
+                        neurons[indexOfNeuron].weight[y, x] = 1;
+                    }
                 }
         }
     }

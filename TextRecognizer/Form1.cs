@@ -30,14 +30,16 @@ namespace TextRecognizer
 
         private Graphics graphics;
 
-        private Pen pen = new Pen(Color.Black, 15f);
+        private Pen pen = new Pen(Color.Black, 3f);
 
         private NeuronWeb neuronWeb = new NeuronWeb();
+
+        private string guess;
 
         private void SetSize()
          {
             Rectangle rectangle = Screen.PrimaryScreen.Bounds;
-            picture = new Bitmap(rectangle.Width, rectangle.Height);
+            picture = new Bitmap(90, 90);
             graphics = Graphics.FromImage(picture);
 
             pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
@@ -59,6 +61,13 @@ namespace TextRecognizer
 
             //Задаём разрешение 
             neuronWeb.SetResolutionForEveryone();
+        }
+
+        private void Clear()
+        {
+
+            graphics.Clear(pictureBox1.BackColor);
+            pictureBox1.Image = picture;
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -90,15 +99,59 @@ namespace TextRecognizer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string guess = neuronWeb.Recognize((Bitmap)pictureBox1.Image);
+            //
+            Bitmap asInput = new Bitmap(pictureBox1.Image, NeuronWeb.ResolutionX, NeuronWeb.ResolutionY);
+            pictureBox2.Image = new Bitmap(asInput, picture.Size);
 
-            
-            label3.Text = guess;
+            guess = neuronWeb.Recognize((Bitmap)pictureBox1.Image);
+            if (guess == string.Empty)
+            {
+                
+                label4.Text = "ИИ не может угадать букву. Напишите правильную букву и нажмите обучить";
+                return;
+            }
+
+            Neuron guessNeuron = neuronWeb.FindNeuron(guess);
+            Bitmap weightToBMP = Converter.ArrayToBMP(guessNeuron.weight);
+            pictureBox2.Image = new Bitmap(weightToBMP, picture.Size);
+
+            label4.Text = "ИИ считает, что это буква – " + guess.ToUpper();
+            label4.BackColor = Color.Aqua;
 
             textBox1.Text = guess;
             textBox1.Focus();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            label4.Text = "Нарисуйте букву для ИИ";
+            guess = "";
+            textBox1.Text = "";
+            Clear();
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text == string.Empty)
+            {
+                MessageBox.Show("Напишите правильную букву");
+                return;
+            }
+                string trueName = textBox1.Text;
+                string falseName = guess;
+
+                neuronWeb.Train(trueName, falseName);
+
+                textBox1.Text = "";
+                label4.Text = "ИИ понял свои ошибки, но не до конца. Продолжайте рисовать.";
+                label4.BackColor = Color.OrangeRed;
+                Clear();
+            if (falseName == string.Empty)
+            {
+                Neuron trueNeuron = neuronWeb.FindNeuron(trueName);
+                Bitmap weightToBMP = Converter.ArrayToBMP(trueNeuron.weight);
+                pictureBox2.Image = new Bitmap(weightToBMP, picture.Size);
+            }
+        }
     }
-
-
 }

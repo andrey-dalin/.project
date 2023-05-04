@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArrayPoints.cs" />
+    <Compile Include="Converter.cs" />
     <Compile Include="MyColors.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

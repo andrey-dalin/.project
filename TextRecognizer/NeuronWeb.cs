@@ -12,6 +12,16 @@ namespace TextRecognizer
         public static int ResolutionX;
         public static int ResolutionY;
 
+        public Neuron FindNeuron(string name)
+        {
+            if (name == string.Empty)
+            {
+                return null;
+            }
+            int indexInArray = Array.FindIndex(Neurons, (Neuron neuron) => neuron.name == name);
+            return Neurons[indexInArray];
+        }
+
         public void NamingNeurons()
         {
             for (int i = 'а', j = 0; i <= 'я'; i++, j++)
@@ -46,17 +56,22 @@ namespace TextRecognizer
                     for (int x = 0; x < scaledInput.Width; x++)
                         for (int y = 0; y < scaledInput.Height; y++)
                         {
-                            int colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
-                            Neurons[i].input[y, x] = colorOfPixel;
+                            float colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
+
+                            if (Neuron.IsWhite(colorOfPixel))
+                            {
+                                Neurons[i].input[y, x] = MyColors.White;
+                            }
+                            else
+                            {
+                                Neurons[i].input[y, x] = MyColors.Black;
+                            }
                         }
             }
             else
             {
                 MessageBox.Show("Нарисуйте букву");
             }
-            
-
-
         }
 
         public void FindMatches()
@@ -66,19 +81,10 @@ namespace TextRecognizer
                 for (int y = 0; y < Neurons[0].weight.GetLength(0); y++)
                     for (int x = 0; x < Neurons[0].weight.GetLength(1); x++)
                     {
-                        int input = Neurons[i].input[y, x];
+                        float input = Neurons[i].input[y, x];
 
-                        //если пиксель белый в входном пикселе, то убираем. Если черный, то в совпадения пишем текущий вес, присвоенный пикселю
-                        if (Neuron.IsWhite(input))
-                        {
-                            Neurons[i].matches[y, x] = MyColors.White;
-                        }
-                        else
-                        {
-                            Neurons[i].matches[y, x] = Neurons[i].weight[y, x];
-                        }
+                        Neurons[i].matches[y, x] = input * Neurons[i].weight[y, x];
                     }
-
         }
 
         public void Sum()
@@ -96,8 +102,8 @@ namespace TextRecognizer
         {
             //находим нейрон, в котором максимальная сумма совпадений
             int numberInArray;
-            int maxBlackInSums;
-            int[] sums = new int[Neurons.Length];
+            float maxBlackInSums;
+            float[] sums = new float[Neurons.Length];
 
             //создаём массив с суммами совпадений
             for (int i = 0; i < Neurons.Length; i++)
@@ -105,15 +111,19 @@ namespace TextRecognizer
                 sums[i] = Neurons[i].sumOfMatches;
             }
 
-            //ищем максимальную сумму совпадений, чем ближе к 0 тем лучше, так как черный цвет стремиться к нулю
-            maxBlackInSums = sums.Min();
+            maxBlackInSums = sums.Max();
 
             //находим номер индекса в массиве с максимальной суммой совпадений
-            numberInArray = Array.FindIndex(sums, (int match) => match == maxBlackInSums);
+            numberInArray = Array.FindIndex(sums, (float match) => match == maxBlackInSums);
 
-
-            return Neurons[numberInArray].name;
-
+            if (Neurons[numberInArray].sumOfMatches >= Neurons[numberInArray].limit)
+            {
+                return Neurons[numberInArray].name;
+            }
+            else
+            {                
+                return string.Empty;
+            }
         }
         public string Recognize(Bitmap input)
         {
@@ -129,6 +139,10 @@ namespace TextRecognizer
         public void Train(string trueName, string falseName)
         {
             Trainer.IncrementWeight(trueName, Neurons);
+            if (falseName == string.Empty) 
+            {
+                return;
+            }
             Trainer.DecrementWeight(falseName, Neurons);
         }
     }

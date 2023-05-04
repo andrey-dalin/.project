@@ -9,8 +9,8 @@ namespace TextRecognizer
 {
     public static class MyColors
     {
-        public static int Black = Convert.ToInt32(Color.Black.R);
-        public static int White = Convert.ToInt32(Color.White.R);
-        public static int NearWhite = 250;
+        public static float Black = 1;
+        public static float White = 0;
+        public static float NearWhite = 250;
     }
 }
