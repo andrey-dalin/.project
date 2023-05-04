@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace TextRecognizer
 {
@@ -37,16 +38,23 @@ namespace TextRecognizer
 
         public void SetInput(Bitmap input)
         {
+            if (input != null)
+            {
+                Bitmap scaledInput = new Bitmap(input, new Size(ResolutionX, ResolutionY));
 
-            Bitmap scaledInput = new Bitmap(input, new Size(ResolutionX, ResolutionY));
-
-            for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < scaledInput.Width; x++)
-                    for (int y = 0; y < scaledInput.Height; y++)
-                    {
-                        int colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
-                        Neurons[i].input[y, x] = colorOfPixel;
-                    }
+                for (int i = 0; i < Neurons.Length; i++)
+                    for (int x = 0; x < scaledInput.Width; x++)
+                        for (int y = 0; y < scaledInput.Height; y++)
+                        {
+                            int colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
+                            Neurons[i].input[y, x] = colorOfPixel;
+                        }
+            }
+            else
+            {
+                MessageBox.Show("Нарисуйте букву");
+            }
+            
 
 
         }
@@ -55,21 +63,19 @@ namespace TextRecognizer
         {
             //Из 2 статьи масштабирование
             for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < Neurons[0].weight.GetLength(0); x++)
-                    for (int y = 0; y < Neurons[0].weight.Rank; y++)
+                for (int y = 0; y < Neurons[0].weight.GetLength(0); y++)
+                    for (int x = 0; x < Neurons[0].weight.GetLength(1); x++)
                     {
                         int input = Neurons[i].input[y, x];
-                        int match = Neurons[i].matches[y, x];
-                        int weight = Neurons[i].weight[y, x];
 
                         //если пиксель белый в входном пикселе, то убираем. Если черный, то в совпадения пишем текущий вес, присвоенный пикселю
                         if (Neuron.IsWhite(input))
                         {
-                            match = MyColors.White;
+                            Neurons[i].matches[y, x] = MyColors.White;
                         }
                         else
                         {
-                            match = Neurons[i].weight[y, x];
+                            Neurons[i].matches[y, x] = Neurons[i].weight[y, x];
                         }
                     }
 
@@ -79,8 +85,8 @@ namespace TextRecognizer
         {
             //прибавляем в сумме совпадений все совпадающие пиксели
             for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < Neurons[0].weight.GetLength(0); x++)
-                    for (int y = 0; y < Neurons[0].weight.Rank; y++)
+                for (int y = 0; y < Neurons[0].weight.GetLength(0); y++)
+                    for (int x = 0; x < Neurons[0].weight.GetLength(1); x++)
                     {
                         Neurons[i].sumOfMatches += Neurons[i].matches[y, x];
                     }

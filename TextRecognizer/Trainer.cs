@@ -13,11 +13,11 @@ namespace TextRecognizer
         {
             int indexOfNeuron = Array.FindIndex(neurons, x => x.name == name);
 
-            for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(0); x++) 
-                for (int y = 0; y < neurons[indexOfNeuron].weight.Rank;  y++)
+            for (int y = 0; y < neurons[indexOfNeuron].weight.GetLength(0); y++) 
+                for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1);  x++)
                 {
                     neurons[indexOfNeuron].weight[y, x] += 
-                        neurons[indexOfNeuron].input[y, x] / 2;
+                        (int)(neurons[indexOfNeuron].input[y, x] / 2);
                 }
         }
 
@@ -25,11 +25,11 @@ namespace TextRecognizer
         {
             int indexOfNeuron = Array.FindIndex(neurons, x => x.name == name);
 
-            for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(0); x++)
-                for (int y = 0; y < neurons[indexOfNeuron].weight.Rank; y++)
+            for (int y = 0; y < neurons[indexOfNeuron].weight.GetLength(0); y++)
+                for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1); x++)
                 {
                     neurons[indexOfNeuron].weight[y, x] -=
-                        neurons[indexOfNeuron].input[y, x] / 2;
+                        (int)(neurons[indexOfNeuron].input[y, x] / 2);
                 }
         }
     }
