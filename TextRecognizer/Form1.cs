@@ -14,8 +14,12 @@ namespace TextRecognizer
     {
         public Form1()
         {
+
+            NeuronWeb.ResolutionX = 30;
+            NeuronWeb.ResolutionY = 30;
             InitializeComponent();
             SetSize();
+            StartNeuronWeb();
         }
 
         private bool IsMouseDown;
@@ -26,7 +30,9 @@ namespace TextRecognizer
 
         private Graphics graphics;
 
-        private Pen pen = new Pen(Color.Black, 30f);
+        private Pen pen = new Pen(Color.Black, 15f);
+
+        private NeuronWeb neuronWeb = new NeuronWeb();
 
         private void SetSize()
          {
@@ -35,6 +41,24 @@ namespace TextRecognizer
             graphics = Graphics.FromImage(picture);
 
             pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+            pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+        }
+
+        private void StartNeuronWeb()
+        {
+            int numberOfRussianLetters = 33;
+            string pathOfFolder = "A:\\Andrey\\.project\\TextRecognizer\\resource\\letters";            
+
+            neuronWeb.Neurons = new Neuron[numberOfRussianLetters];
+
+            //Создаём имя для каждого нейрона
+            neuronWeb.NamingNeurons();
+
+            //Создаём путь для дальнейшего сохранения веса
+            neuronWeb.MakePathForEveryone(pathOfFolder);
+
+            //Задаём разрешение 
+            neuronWeb.SetResolutionForEveryone();
         }
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
@@ -62,6 +86,17 @@ namespace TextRecognizer
 
                 arrayPoints.SetPoint(e.X, e.Y);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string guess = neuronWeb.Recognize((Bitmap)pictureBox1.Image);
+
+            
+            label3.Text = guess;
+
+            textBox1.Text = guess;
+            textBox1.Focus();
         }
     }
 

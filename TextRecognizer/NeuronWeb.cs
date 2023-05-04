@@ -37,11 +37,14 @@ namespace TextRecognizer
 
         public void SetInput(Bitmap input)
         {
+
+            Bitmap scaledInput = new Bitmap(input, new Size(ResolutionX, ResolutionY));
+
             for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < input.Width; x++)
-                    for (int y = 0; y < input.Height; y++)
+                for (int x = 0; x < scaledInput.Width; x++)
+                    for (int y = 0; y < scaledInput.Height; y++)
                     {
-                        int colorOfPixel = Convert.ToInt32(input.GetPixel(x, y).R);
+                        int colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
                         Neurons[i].input[y, x] = colorOfPixel;
                     }
 
