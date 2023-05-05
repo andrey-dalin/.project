@@ -22,11 +22,9 @@ namespace TextRecognizer
             StartNeuronWeb();
         }
 
-        private bool IsMouseDown;
+        int x0, y0;
 
-        private ArrayPoints arrayPoints = new ArrayPoints(2);
-
-        private Bitmap picture = new Bitmap(100, 100);
+        private Bitmap bitmap = new Bitmap(90, 90);
 
         private Graphics graphics;
 
@@ -37,10 +35,19 @@ namespace TextRecognizer
         private string guess;
 
         private void SetSize()
-         {
-            Rectangle rectangle = Screen.PrimaryScreen.Bounds;
-            picture = new Bitmap(90, 90);
-            graphics = Graphics.FromImage(picture);
+        {
+            x0 = y0 = 0;
+
+
+            pictureBox1.Size = new Size(bitmap.Width, bitmap.Height);
+            //pictureBox1.Scale(new SizeF(450, 450));
+            //bitmap.SetResolution(pictureBox1.Width, pictureBox1.Height);
+
+            graphics = Graphics.FromImage(bitmap);
+
+            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+            graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 
             pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
             pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
@@ -49,7 +56,7 @@ namespace TextRecognizer
         private void StartNeuronWeb()
         {
             int numberOfRussianLetters = 33;
-            string pathOfFolder = "A:\\Andrey\\.project\\TextRecognizer\\resource\\letters";            
+            string pathOfFolder = "A:\\Andrey\\.project\\TextRecognizer\\resource\\letters";
 
             neuronWeb.Neurons = new Neuron[numberOfRussianLetters];
 
@@ -67,90 +74,80 @@ namespace TextRecognizer
         {
 
             graphics.Clear(pictureBox1.BackColor);
-            pictureBox1.Image = picture;
-        }
-
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
-        {
-            IsMouseDown = true;
-        }
-
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
-        {
-            IsMouseDown = false;
-            arrayPoints.ResetPoints();
+            //pictureBox1.Image = picture;
         }
 
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (IsMouseDown == false) return;
-
-            arrayPoints.SetPoint(e.X, e.Y);
-
-            if (arrayPoints.GetCountPoints() >= 2)
+            if (e.Button == MouseButtons.Left)
             {
-                graphics.DrawLines(pen, arrayPoints.GetPoints());
-
-                pictureBox1.Image = picture;
-
-                arrayPoints.SetPoint(e.X, e.Y);
+                graphics.DrawLine(pen, x0, y0, e.X, e.Y);
+                pictureBox1.Image = bitmap;
             }
+
+            x0 = e.X;
+            y0 = e.Y;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+     
+
+
+        private void toolStripRecognize_Click(object sender, EventArgs e)
         {
+
             //
             Bitmap asInput = new Bitmap(pictureBox1.Image, NeuronWeb.ResolutionX, NeuronWeb.ResolutionY);
-            pictureBox2.Image = new Bitmap(asInput, picture.Size);
+            pictureBox2.Image = new Bitmap(asInput, 90, 90);
 
             guess = neuronWeb.Recognize((Bitmap)pictureBox1.Image);
             if (guess == string.Empty)
             {
-                
-                label4.Text = "ИИ не может угадать букву. Напишите правильную букву и нажмите обучить";
+
+                toolStripStatusLabel1.Text = "ИИ не может угадать букву. Напишите правильную букву и нажмите обучить";
                 return;
             }
 
             Neuron guessNeuron = neuronWeb.FindNeuron(guess);
             Bitmap weightToBMP = Converter.ArrayToBMP(guessNeuron.weight);
-            pictureBox2.Image = new Bitmap(weightToBMP, picture.Size);
+            pictureBox2.Image = new Bitmap(weightToBMP, 90, 90);
 
-            label4.Text = "ИИ считает, что это буква – " + guess.ToUpper();
-            label4.BackColor = Color.Aqua;
+            toolStripStatusLabel1.Text = "ИИ считает, что это буква – " + guess.ToUpper();
+            toolStripStatusLabel1.BackColor = Color.Aqua;
 
-            textBox1.Text = guess;
-            textBox1.Focus();
+            toolStripTextBoxTrueSymbol.Text = guess;
+            toolStripTextBoxTrueSymbol.Focus();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void toolStripClean_Click(object sender, EventArgs e)
         {
-            label4.Text = "Нарисуйте букву для ИИ";
+
+            toolStripStatusLabel1.Text = "Нарисуйте букву для ИИ";
             guess = "";
-            textBox1.Text = "";
+            toolStripTextBoxTrueSymbol.Text = "";
             Clear();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void toolStripTrain_Click(object sender, EventArgs e)
         {
-            if (textBox1.Text == string.Empty)
+            if (toolStripTextBoxTrueSymbol.Text == string.Empty)
             {
                 MessageBox.Show("Напишите правильную букву");
                 return;
             }
-                string trueName = textBox1.Text;
-                string falseName = guess;
+            string trueName = toolStripTextBoxTrueSymbol.Text;
+            string falseName = guess;
 
-                neuronWeb.Train(trueName, falseName);
+            neuronWeb.Train(trueName, falseName);
 
-                textBox1.Text = "";
-                label4.Text = "ИИ понял свои ошибки, но не до конца. Продолжайте рисовать.";
-                label4.BackColor = Color.OrangeRed;
-                Clear();
+            toolStripTextBoxTrueSymbol.Text = "";
+            toolStripStatusLabel1.Text = "ИИ понял свои ошибки, но не до конца. Продолжайте рисовать.";
+            toolStripStatusLabel1.BackColor = Color.OrangeRed;
+            Clear();
             if (falseName == string.Empty)
             {
                 Neuron trueNeuron = neuronWeb.FindNeuron(trueName);
                 Bitmap weightToBMP = Converter.ArrayToBMP(trueNeuron.weight);
-                pictureBox2.Image = new Bitmap(weightToBMP, picture.Size);
+                pictureBox2.Image = new Bitmap(weightToBMP, 90, 90);
             }
         }
     }
