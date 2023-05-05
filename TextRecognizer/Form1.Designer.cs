@@ -32,27 +32,29 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripRecognize = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripClean = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextBoxTrueSymbol = new System.Windows.Forms.ToolStripTextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.toolStripRecognize = new System.Windows.Forms.ToolStripButton();
-            this.toolStripClean = new System.Windows.Forms.ToolStripButton();
             this.toolStripTrain = new System.Windows.Forms.ToolStripButton();
             this.toolStripPlus = new System.Windows.Forms.ToolStripButton();
             this.toolStripMinus = new System.Windows.Forms.ToolStripButton();
+            this.toolStripComboScale = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.statusStrip1.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -100,6 +102,27 @@
             this.splitContainer1.SplitterDistance = 331;
             this.splitContainer1.TabIndex = 10;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 26);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(329, 351);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox2.Location = new System.Drawing.Point(0, 26);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(463, 351);
+            this.pictureBox2.TabIndex = 1;
+            this.pictureBox2.TabStop = false;
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -128,6 +151,8 @@
             this.toolStripSeparator2,
             this.toolStripTextBoxTrueSymbol,
             this.toolStripTrain,
+            this.toolStripSeparator3,
+            this.toolStripComboScale,
             this.toolStripPlus,
             this.toolStripMinus});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
@@ -137,10 +162,32 @@
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // toolStripRecognize
+            // 
+            this.toolStripRecognize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripRecognize.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripRecognize.Image = ((System.Drawing.Image)(resources.GetObject("toolStripRecognize.Image")));
+            this.toolStripRecognize.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripRecognize.Name = "toolStripRecognize";
+            this.toolStripRecognize.Size = new System.Drawing.Size(132, 34);
+            this.toolStripRecognize.Text = "Распознать";
+            this.toolStripRecognize.Click += new System.EventHandler(this.toolStripRecognize_Click);
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 37);
+            // 
+            // toolStripClean
+            // 
+            this.toolStripClean.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripClean.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripClean.Image = ((System.Drawing.Image)(resources.GetObject("toolStripClean.Image")));
+            this.toolStripClean.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripClean.Name = "toolStripClean";
+            this.toolStripClean.Size = new System.Drawing.Size(131, 34);
+            this.toolStripClean.Text = "Правильно";
+            this.toolStripClean.Click += new System.EventHandler(this.toolStripClean_Click);
             // 
             // toolStripSeparator2
             // 
@@ -154,51 +201,6 @@
             this.toolStripTextBoxTrueSymbol.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripTextBoxTrueSymbol.Name = "toolStripTextBoxTrueSymbol";
             this.toolStripTextBoxTrueSymbol.Size = new System.Drawing.Size(100, 37);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 26);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(329, 351);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.Location = new System.Drawing.Point(0, 26);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(463, 351);
-            this.pictureBox2.TabIndex = 1;
-            this.pictureBox2.TabStop = false;
-            // 
-            // toolStripRecognize
-            // 
-            this.toolStripRecognize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripRecognize.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripRecognize.Image = ((System.Drawing.Image)(resources.GetObject("toolStripRecognize.Image")));
-            this.toolStripRecognize.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripRecognize.Name = "toolStripRecognize";
-            this.toolStripRecognize.Size = new System.Drawing.Size(132, 34);
-            this.toolStripRecognize.Text = "Распознать";
-            this.toolStripRecognize.Click += new System.EventHandler(this.toolStripRecognize_Click);
-            // 
-            // toolStripClean
-            // 
-            this.toolStripClean.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripClean.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripClean.Image = ((System.Drawing.Image)(resources.GetObject("toolStripClean.Image")));
-            this.toolStripClean.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripClean.Name = "toolStripClean";
-            this.toolStripClean.Size = new System.Drawing.Size(131, 34);
-            this.toolStripClean.Text = "Правильно";
-            this.toolStripClean.Click += new System.EventHandler(this.toolStripClean_Click);
             // 
             // toolStripTrain
             // 
@@ -231,6 +233,28 @@
             this.toolStripMinus.Text = "toolStripButton2";
             this.toolStripMinus.Click += new System.EventHandler(this.toolStripMinus_Click);
             // 
+            // toolStripComboScale
+            // 
+            this.toolStripComboScale.DropDownHeight = 180;
+            this.toolStripComboScale.DropDownWidth = 255;
+            this.toolStripComboScale.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripComboScale.IntegralHeight = false;
+            this.toolStripComboScale.Items.AddRange(new object[] {
+            "Реальный размер",
+            "По центру",
+            "Масштабировать",
+            "Сохранить пропорции",
+            "Пользовательский"});
+            this.toolStripComboScale.Name = "toolStripComboScale";
+            this.toolStripComboScale.Size = new System.Drawing.Size(121, 37);
+            this.toolStripComboScale.Text = "Масштабировать";
+            this.toolStripComboScale.SelectedIndexChanged += new System.EventHandler(this.toolStripComboScale_SelectedIndexChanged);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 37);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -247,12 +271,12 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -276,6 +300,8 @@
         private System.Windows.Forms.ToolStripButton toolStripTrain;
         private System.Windows.Forms.ToolStripButton toolStripPlus;
         private System.Windows.Forms.ToolStripButton toolStripMinus;
+        private System.Windows.Forms.ToolStripComboBox toolStripComboScale;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
     }
 }
 

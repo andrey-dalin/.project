@@ -21,10 +21,11 @@ namespace TextRecognizer
             SetSize();
             StartNeuronWeb();
         }
-
         int x0, y0;
 
-        private Bitmap bitmap = new Bitmap(90, 90);
+        private int scale = 100;
+
+        Bitmap bitmap = new Bitmap(600, 600);
 
         private Graphics graphics;
 
@@ -38,11 +39,7 @@ namespace TextRecognizer
         {
             x0 = y0 = 0;
 
-
-            pictureBox1.Size = new Size(bitmap.Width, bitmap.Height);
-            //pictureBox1.Scale(new SizeF(450, 450));
-            //bitmap.SetResolution(pictureBox1.Width, pictureBox1.Height);
-
+            pictureBox1.Image = new Bitmap(200, 200);
             graphics = Graphics.FromImage(bitmap);
 
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
@@ -81,16 +78,15 @@ namespace TextRecognizer
         {
             if (e.Button == MouseButtons.Left)
             {
-                graphics.DrawLine(pen, x0, y0, e.X, e.Y);
+                Graphics g = Graphics.FromImage(bitmap);
+                g.DrawLine(pen, x0 - scale /100, y0 -scale / 100, e.X, e.Y);
                 pictureBox1.Image = bitmap;
             }
 
             x0 = e.X;
             y0 = e.Y;
+
         }
-
-     
-
 
         private void toolStripRecognize_Click(object sender, EventArgs e)
         {
@@ -152,14 +148,84 @@ namespace TextRecognizer
             }
         }
 
+
+        private void toolStripComboScale_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            switch (toolStripComboScale.SelectedIndex)
+            {
+                case 0:
+                    pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
+                    pictureBox1.Dock = DockStyle.Fill;
+                    toolStripPlus.Enabled = false;
+                    toolStripMinus.Enabled = false;
+
+                    MessageBox.Show(pictureBox1.Size.ToString());
+                    break;
+
+                case 1:
+                    pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+                    pictureBox1.Dock = DockStyle.Fill;
+                    toolStripPlus.Enabled = false;
+                    toolStripMinus.Enabled = false;
+                    break;
+
+                case 2:
+                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox1.Dock = DockStyle.Fill;
+                    toolStripPlus.Enabled = false;
+                    toolStripMinus.Enabled = false;
+                    break;
+
+                case 3:
+                    pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+                    pictureBox1.Dock = DockStyle.Fill;
+                    toolStripPlus.Enabled = false;
+                    toolStripMinus.Enabled = false;
+
+
+                    break;
+
+                case 4:
+                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox1.Dock = DockStyle.None;
+                    toolStripPlus.Enabled = true;
+                    toolStripMinus.Enabled = true;
+
+                    scale = 100;
+
+                    MessageBox.Show(pictureBox1.Size.ToString());
+                    break;
+
+            }
+        }
+
+
+
+
+
+
         private void toolStripPlus_Click(object sender, EventArgs e)
         {
+            pictureBox1.Width = (int)(pictureBox1.Width * 1.2);
+            pictureBox1.Height = (int)(pictureBox1.Height * 1.2);
 
+            scale = (int)( scale * 1.2);
         }
-
         private void toolStripMinus_Click(object sender, EventArgs e)
         {
+            if (pictureBox1.Width > 12 & pictureBox1.Height > 12)
+            {
+                pictureBox1.Width = (int)(pictureBox1.Width / 1.2);
+                pictureBox1.Height = (int)(pictureBox1.Height / 1.2);
 
+                scale = (int)(scale / 1.2);
+            }           
         }
+
+
+
+
+
+
     }
 }
