@@ -127,6 +127,7 @@ namespace TextRecognizer
             Clear();
         }
 
+
         private void toolStripTrain_Click(object sender, EventArgs e)
         {
             if (toolStripTextBoxTrueSymbol.Text == string.Empty)
@@ -149,6 +150,16 @@ namespace TextRecognizer
                 Bitmap weightToBMP = Converter.ArrayToBMP(trueNeuron.weight);
                 pictureBox2.Image = new Bitmap(weightToBMP, 90, 90);
             }
+        }
+
+        private void toolStripPlus_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripMinus_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
