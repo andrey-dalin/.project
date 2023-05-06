@@ -108,7 +108,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(0, 26);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(400, 400);
+            this.pictureBox1.Size = new System.Drawing.Size(270, 270);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
@@ -228,13 +228,11 @@
             this.toolStripComboScale.IntegralHeight = false;
             this.toolStripComboScale.Items.AddRange(new object[] {
             "Реальный размер",
-            "По центру",
             "Масштабировать",
-            "Сохранить пропорции",
             "Пользовательский"});
             this.toolStripComboScale.Name = "toolStripComboScale";
             this.toolStripComboScale.Size = new System.Drawing.Size(121, 37);
-            this.toolStripComboScale.Text = "Масштабировать";
+            this.toolStripComboScale.Text = "Масштаб";
             this.toolStripComboScale.SelectedIndexChanged += new System.EventHandler(this.toolStripComboScale_SelectedIndexChanged);
             // 
             // toolStripPlus

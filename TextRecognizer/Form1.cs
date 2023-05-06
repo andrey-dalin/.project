@@ -18,29 +18,29 @@ namespace TextRecognizer
             NeuronWeb.ResolutionX = 30;
             NeuronWeb.ResolutionY = 30;
             InitializeComponent();
-            SetSize();
+            MyInitialize();
             StartNeuronWeb();
+            toolStripComboScale.SelectedIndex = 0;
         }
-        int startX, startY, endX, endY;
+        int startX, startY, endX, endY = 0;
 
         double scaleX;
         double scaleY;
 
         private int scale = 100;
 
-        Bitmap bitmap = new Bitmap(400, 400);
+        Bitmap bitmap = new Bitmap(270, 270);
 
         private Graphics graphics;
 
-        private Pen pen = new Pen(Color.Black, 3f);
+        private Pen pen = new Pen(Color.Black, 20f);
 
         private NeuronWeb neuronWeb = new NeuronWeb();
 
         private string guess;
 
-        private void SetSize()
+        private void MyInitialize()
         {
-            startX = 0; startY = 0; endX = 0; endY = 0;
             pictureBox1.Image = bitmap;
             graphics = Graphics.FromImage(bitmap);
 
@@ -82,7 +82,8 @@ namespace TextRecognizer
 
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-
+            startX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
+            startY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
         }
 
         private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
@@ -98,13 +99,16 @@ namespace TextRecognizer
                 Graphics g = Graphics.FromImage(bitmap);
                 endX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
                 endY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
+                Point start = new Point(startX, startY);
+                Point end = new Point(endX, endY);
                 if (startX != 0 & startY != 0)
                 {
-                    g.DrawLine(pen, startX, startY, endX, endY);
+                    g.DrawLine(pen, start, end);
                     pictureBox1.Image = bitmap;
+                    startX = endX;
+                    startY = endY;
                 }
-                startX = endX;
-                startY = endY;
+                
             }
         }
 
@@ -178,6 +182,12 @@ namespace TextRecognizer
                     pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
                     pictureBox1.Dock = DockStyle.None;
                     pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+
+                    pictureBox2.Size = bitmap.Size;
+                    pictureBox2.SizeMode = PictureBoxSizeMode.Normal;
+                    pictureBox2.Dock = DockStyle.None;
+                    pictureBox2.BorderStyle = BorderStyle.FixedSingle;
+
                     toolStripPlus.Enabled = false;
                     toolStripMinus.Enabled = false;
 
@@ -185,48 +195,34 @@ namespace TextRecognizer
                     scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                     scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
 
-                    break;
+                    break;               
 
                 case 1:
-                    pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
                     pictureBox1.Dock = DockStyle.Fill;
+
+                    pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox2.Dock = DockStyle.Fill;
+                    pictureBox2.BorderStyle = BorderStyle.FixedSingle;
+
                     toolStripPlus.Enabled = false;
                     toolStripMinus.Enabled = false;
 
 
                     scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                     scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
                     break;
 
                 case 2:
-                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                    pictureBox1.Dock = DockStyle.Fill;
-                    toolStripPlus.Enabled = false;
-                    toolStripMinus.Enabled = false;
-
-
-                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-                    break;
-
-                case 3:
-                    pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                    pictureBox1.Dock = DockStyle.Fill;
-                    toolStripPlus.Enabled = false;
-                    toolStripMinus.Enabled = false;
-
-
-                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-
-                    break;
-
-                case 4:
                     pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
                     pictureBox1.Dock = DockStyle.None;
                     pictureBox1.BorderStyle = BorderStyle.FixedSingle;
+
+                    pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+                    pictureBox2.Dock = DockStyle.None;
+                    pictureBox2.BorderStyle = BorderStyle.FixedSingle;
+
                     toolStripPlus.Enabled = true;
                     toolStripMinus.Enabled = true;
 
@@ -241,11 +237,6 @@ namespace TextRecognizer
             }
         }
 
-
-
-
-
-
         private void toolStripPlus_Click(object sender, EventArgs e)
         {
 
@@ -253,17 +244,24 @@ namespace TextRecognizer
             pictureBox1.Width = (int)(pictureBox1.Width * 1.2);
             pictureBox1.Height = (int)(pictureBox1.Height * 1.2);
 
+            pictureBox2.Width = (int)(pictureBox1.Width * 1.2);
+            pictureBox2.Height = (int)(pictureBox1.Height * 1.2);
+
             scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
             scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
 
             scale = (int)(scale * 1.2);
         }
+
         private void toolStripMinus_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Width > 12 & pictureBox1.Height > 12)
             {
                 pictureBox1.Width = (int)(pictureBox1.Width / 1.2);
                 pictureBox1.Height = (int)(pictureBox1.Height / 1.2);
+
+                pictureBox2.Width = (int)(pictureBox1.Width / 1.2);
+                pictureBox2.Height = (int)(pictureBox1.Height / 1.2);
 
                 scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                 scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
