@@ -43,10 +43,10 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripTextBoxTrueSymbol = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripTrain = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripComboScale = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripPlus = new System.Windows.Forms.ToolStripButton();
             this.toolStripMinus = new System.Windows.Forms.ToolStripButton();
-            this.toolStripComboScale = new System.Windows.Forms.ToolStripComboBox();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -105,13 +105,15 @@
             // pictureBox1
             // 
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 26);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(329, 351);
+            this.pictureBox1.Size = new System.Drawing.Size(400, 400);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // pictureBox2
             // 
@@ -213,6 +215,28 @@
             this.toolStripTrain.Text = "Обучить";
             this.toolStripTrain.Click += new System.EventHandler(this.toolStripTrain_Click);
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 37);
+            // 
+            // toolStripComboScale
+            // 
+            this.toolStripComboScale.DropDownHeight = 180;
+            this.toolStripComboScale.DropDownWidth = 255;
+            this.toolStripComboScale.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripComboScale.IntegralHeight = false;
+            this.toolStripComboScale.Items.AddRange(new object[] {
+            "Реальный размер",
+            "По центру",
+            "Масштабировать",
+            "Сохранить пропорции",
+            "Пользовательский"});
+            this.toolStripComboScale.Name = "toolStripComboScale";
+            this.toolStripComboScale.Size = new System.Drawing.Size(121, 37);
+            this.toolStripComboScale.Text = "Масштабировать";
+            this.toolStripComboScale.SelectedIndexChanged += new System.EventHandler(this.toolStripComboScale_SelectedIndexChanged);
+            // 
             // toolStripPlus
             // 
             this.toolStripPlus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -232,28 +256,6 @@
             this.toolStripMinus.Size = new System.Drawing.Size(23, 34);
             this.toolStripMinus.Text = "toolStripButton2";
             this.toolStripMinus.Click += new System.EventHandler(this.toolStripMinus_Click);
-            // 
-            // toolStripComboScale
-            // 
-            this.toolStripComboScale.DropDownHeight = 180;
-            this.toolStripComboScale.DropDownWidth = 255;
-            this.toolStripComboScale.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripComboScale.IntegralHeight = false;
-            this.toolStripComboScale.Items.AddRange(new object[] {
-            "Реальный размер",
-            "По центру",
-            "Масштабировать",
-            "Сохранить пропорции",
-            "Пользовательский"});
-            this.toolStripComboScale.Name = "toolStripComboScale";
-            this.toolStripComboScale.Size = new System.Drawing.Size(121, 37);
-            this.toolStripComboScale.Text = "Масштабировать";
-            this.toolStripComboScale.SelectedIndexChanged += new System.EventHandler(this.toolStripComboScale_SelectedIndexChanged);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 37);
             // 
             // Form1
             // 

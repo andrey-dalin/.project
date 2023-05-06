@@ -21,11 +21,14 @@ namespace TextRecognizer
             SetSize();
             StartNeuronWeb();
         }
-        int x0, y0;
+        int startX, startY, endX, endY;
+
+        double scaleX;
+        double scaleY;
 
         private int scale = 100;
 
-        Bitmap bitmap = new Bitmap(600, 600);
+        Bitmap bitmap = new Bitmap(400, 400);
 
         private Graphics graphics;
 
@@ -37,10 +40,13 @@ namespace TextRecognizer
 
         private void SetSize()
         {
-            x0 = y0 = 0;
-
-            pictureBox1.Image = new Bitmap(200, 200);
+            startX = 0; startY = 0; endX = 0; endY = 0;
+            pictureBox1.Image = bitmap;
             graphics = Graphics.FromImage(bitmap);
+
+
+            scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+            scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
 
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
             graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
@@ -74,18 +80,32 @@ namespace TextRecognizer
             //pictureBox1.Image = picture;
         }
 
+        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
+
+
                 Graphics g = Graphics.FromImage(bitmap);
-                g.DrawLine(pen, x0 - scale /100, y0 -scale / 100, e.X, e.Y);
-                pictureBox1.Image = bitmap;
+                endX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
+                endY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
+                if (startX != 0 & startY != 0)
+                {
+                    g.DrawLine(pen, startX, startY, endX, endY);
+                    pictureBox1.Image = bitmap;
+                }
+                startX = endX;
+                startY = endY;
             }
-
-            x0 = e.X;
-            y0 = e.Y;
-
         }
 
         private void toolStripRecognize_Click(object sender, EventArgs e)
@@ -154,12 +174,17 @@ namespace TextRecognizer
             switch (toolStripComboScale.SelectedIndex)
             {
                 case 0:
+                    pictureBox1.Size = bitmap.Size;
                     pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
-                    pictureBox1.Dock = DockStyle.Fill;
+                    pictureBox1.Dock = DockStyle.None;
+                    pictureBox1.BorderStyle = BorderStyle.FixedSingle;
                     toolStripPlus.Enabled = false;
                     toolStripMinus.Enabled = false;
 
-                    MessageBox.Show(pictureBox1.Size.ToString());
+
+                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
                     break;
 
                 case 1:
@@ -167,6 +192,10 @@ namespace TextRecognizer
                     pictureBox1.Dock = DockStyle.Fill;
                     toolStripPlus.Enabled = false;
                     toolStripMinus.Enabled = false;
+
+
+                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
                     break;
 
                 case 2:
@@ -174,6 +203,11 @@ namespace TextRecognizer
                     pictureBox1.Dock = DockStyle.Fill;
                     toolStripPlus.Enabled = false;
                     toolStripMinus.Enabled = false;
+
+
+                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
                     break;
 
                 case 3:
@@ -183,17 +217,25 @@ namespace TextRecognizer
                     toolStripMinus.Enabled = false;
 
 
+                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
+
                     break;
 
                 case 4:
-                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
                     pictureBox1.Dock = DockStyle.None;
+                    pictureBox1.BorderStyle = BorderStyle.FixedSingle;
                     toolStripPlus.Enabled = true;
                     toolStripMinus.Enabled = true;
 
+
+                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
                     scale = 100;
 
-                    MessageBox.Show(pictureBox1.Size.ToString());
                     break;
 
             }
@@ -206,10 +248,15 @@ namespace TextRecognizer
 
         private void toolStripPlus_Click(object sender, EventArgs e)
         {
+
+
             pictureBox1.Width = (int)(pictureBox1.Width * 1.2);
             pictureBox1.Height = (int)(pictureBox1.Height * 1.2);
 
-            scale = (int)( scale * 1.2);
+            scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+            scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
+            scale = (int)(scale * 1.2);
         }
         private void toolStripMinus_Click(object sender, EventArgs e)
         {
@@ -218,14 +265,11 @@ namespace TextRecognizer
                 pictureBox1.Width = (int)(pictureBox1.Width / 1.2);
                 pictureBox1.Height = (int)(pictureBox1.Height / 1.2);
 
+                scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+                scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
                 scale = (int)(scale / 1.2);
-            }           
+            }
         }
-
-
-
-
-
-
     }
 }
