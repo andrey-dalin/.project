@@ -76,7 +76,6 @@ namespace TextRecognizer
 
         public void FindMatches()
         {
-            //Из 2 статьи масштабирование
             for (int i = 0; i < Neurons.Length; i++)
                 for (int y = 0; y < Neurons[0].weight.GetLength(0); y++)
                     for (int x = 0; x < Neurons[0].weight.GetLength(1); x++)

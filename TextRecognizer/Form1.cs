@@ -29,7 +29,7 @@ namespace TextRecognizer
 
         private int scale = 100;
 
-        Bitmap bitmap = new Bitmap(270, 270);
+        Bitmap bitmap;
 
         private Graphics graphics;
 
@@ -41,6 +41,7 @@ namespace TextRecognizer
 
         private void MyInitialize()
         {
+            bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             pictureBox1.Image = bitmap;
             graphics = Graphics.FromImage(bitmap);
 
@@ -77,19 +78,14 @@ namespace TextRecognizer
         {
 
             graphics.Clear(pictureBox1.BackColor);
-            //pictureBox1.Image = picture;
+            pictureBox1.Image = bitmap;
         }
-
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             startX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
             startY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
         }
-
-        private void pictureBox1_MouseUp(object sender, MouseEventArgs e)
-        {
-
-        }
+        
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
@@ -112,12 +108,14 @@ namespace TextRecognizer
             }
         }
 
+
+
         private void toolStripRecognize_Click(object sender, EventArgs e)
         {
 
             //
-            Bitmap asInput = new Bitmap(pictureBox1.Image, NeuronWeb.ResolutionX, NeuronWeb.ResolutionY);
-            pictureBox2.Image = new Bitmap(asInput, 90, 90);
+            //Bitmap asInput = new Bitmap(pictureBox1.Image, NeuronWeb.ResolutionX, NeuronWeb.ResolutionY);
+            //pictureBox2.Image = new Bitmap(asInput, pictureBox2.Image.Width, pictureBox2.Image.Height);
 
             guess = neuronWeb.Recognize((Bitmap)pictureBox1.Image);
             if (guess == string.Empty)
@@ -129,7 +127,7 @@ namespace TextRecognizer
 
             Neuron guessNeuron = neuronWeb.FindNeuron(guess);
             Bitmap weightToBMP = Converter.ArrayToBMP(guessNeuron.weight);
-            pictureBox2.Image = new Bitmap(weightToBMP, 90, 90);
+            pictureBox2.Image = new Bitmap(weightToBMP, pictureBox2.Width, pictureBox2.Height);
 
             toolStripStatusLabel1.Text = "ИИ считает, что это буква – " + guess.ToUpper();
             toolStripStatusLabel1.BackColor = Color.Aqua;
@@ -168,9 +166,11 @@ namespace TextRecognizer
             {
                 Neuron trueNeuron = neuronWeb.FindNeuron(trueName);
                 Bitmap weightToBMP = Converter.ArrayToBMP(trueNeuron.weight);
-                pictureBox2.Image = new Bitmap(weightToBMP, 90, 90);
+                pictureBox2.Image = new Bitmap(weightToBMP, pictureBox2.Width, pictureBox2.Height);
             }
         }
+
+
 
 
         private void toolStripComboScale_SelectedIndexChanged(object sender, EventArgs e)

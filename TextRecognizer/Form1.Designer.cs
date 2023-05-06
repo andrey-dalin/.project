@@ -113,15 +113,13 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseUp);
             // 
             // pictureBox2
             // 
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox2.Location = new System.Drawing.Point(0, 26);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(463, 351);
+            this.pictureBox2.Size = new System.Drawing.Size(270, 270);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
@@ -231,8 +229,8 @@
             "Масштабировать",
             "Пользовательский"});
             this.toolStripComboScale.Name = "toolStripComboScale";
-            this.toolStripComboScale.Size = new System.Drawing.Size(121, 37);
-            this.toolStripComboScale.Text = "Масштаб";
+            this.toolStripComboScale.Size = new System.Drawing.Size(210, 37);
+            this.toolStripComboScale.Text = "Масштабировать";
             this.toolStripComboScale.SelectedIndexChanged += new System.EventHandler(this.toolStripComboScale_SelectedIndexChanged);
             // 
             // toolStripPlus
