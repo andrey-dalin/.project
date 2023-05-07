@@ -33,15 +33,30 @@ namespace TextRecognizer
 
         private Graphics graphics;
 
-        private Pen pen = new Pen(Color.Black, 20f);
+        private Pen pen = new Pen(Color.Black, 5f);
 
         private NeuronWeb neuronWeb = new NeuronWeb();
 
-        private string guess;
+        private string guess = string.Empty;
+
+        private enum answerOfNeuronWeb
+        {
+            CannotGuess,
+            Guess,
+            DrawSymbol,
+            WriteTrueSymbol,
+            Trained
+        };
 
         private void MyInitialize()
         {
             bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+
+            for (int x = 0; x < pictureBox1.Width; x++)
+                for (int y = 0; y < pictureBox1.Height; y++)
+                    bitmap.SetPixel(x, y, Color.White);
+        
+
             pictureBox1.Image = bitmap;
             graphics = Graphics.FromImage(bitmap);
 
@@ -74,24 +89,16 @@ namespace TextRecognizer
             neuronWeb.SetResolutionForEveryone();
         }
 
-        private void Clear()
-        {
-
-            graphics.Clear(pictureBox1.BackColor);
-            pictureBox1.Image = bitmap;
-        }
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             startX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
             startY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
         }
-        
+
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-
-
                 Graphics g = Graphics.FromImage(bitmap);
                 endX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
                 endY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
@@ -104,70 +111,86 @@ namespace TextRecognizer
                     startX = endX;
                     startY = endY;
                 }
-                
+
             }
         }
 
 
+        private void ToAnswerNeuronWeb(answerOfNeuronWeb answerOfNeuronWeb)
+        {
+            switch (answerOfNeuronWeb)
+            {
+                case answerOfNeuronWeb.CannotGuess:
+                    toolStripStatusLabel1.Text = "ИИ: не могу угадать букву. Напишите правильную букву и нажмите обучить";
+                    guess = string.Empty;
+                    toolStripStatusLabel1.BackColor = Color.DeepPink;
+                    toolStripTextBoxTrueSymbol.Focus();
+                    break;
+
+                case answerOfNeuronWeb.Guess:
+                    toolStripStatusLabel1.Text = "ИИ: я думаю это буква" + " " + guess + ".";
+                    if (guess == string.Empty)
+                        throw new Exception("guess is empty string");
+
+                    toolStripStatusLabel1.BackColor = Color.DeepSkyBlue;
+                    toolStripTextBoxTrueSymbol.Focus();
+                    break;
+
+                case answerOfNeuronWeb.DrawSymbol:
+                    toolStripStatusLabel1.Text = "ИИ: нарисуйте букву.";
+
+                    toolStripStatusLabel1.BackColor = Color.OrangeRed;
+                    break;
+
+                case answerOfNeuronWeb.WriteTrueSymbol:
+                    toolStripStatusLabel1.Text = "ИИ: напишите правильную букву, чтобы обучить.";
+
+                    toolStripStatusLabel1.BackColor = Color.OrangeRed;
+                    break;
+
+                case answerOfNeuronWeb.Trained:
+                    toolStripStatusLabel1.Text = "ИИ: понял свои ошибки. Продолжайте рисовать.";
+                    toolStripTextBoxTrueSymbol.Text = string.Empty;
+
+                    toolStripStatusLabel1.BackColor = Color.Orange;
+                    break;
+            }
+        }
+        private void Clear()
+        {
+
+            graphics.Clear(Color.White);
+            pictureBox1.Image = bitmap;
+        }
 
         private void toolStripRecognize_Click(object sender, EventArgs e)
         {
+            guess = neuronWeb.Recognize(bitmap);
 
-            //
-            //Bitmap asInput = new Bitmap(pictureBox1.Image, NeuronWeb.ResolutionX, NeuronWeb.ResolutionY);
-            //pictureBox2.Image = new Bitmap(asInput, pictureBox2.Image.Width, pictureBox2.Image.Height);
-
-            guess = neuronWeb.Recognize((Bitmap)pictureBox1.Image);
             if (guess == string.Empty)
             {
-
-                toolStripStatusLabel1.Text = "ИИ не может угадать букву. Напишите правильную букву и нажмите обучить";
+                ToAnswerNeuronWeb(answerOfNeuronWeb.CannotGuess);
                 return;
             }
 
-            Neuron guessNeuron = neuronWeb.FindNeuron(guess);
-            Bitmap weightToBMP = Converter.ArrayToBMP(guessNeuron.weight);
-            pictureBox2.Image = new Bitmap(weightToBMP, pictureBox2.Width, pictureBox2.Height);
+            ToAnswerNeuronWeb(answerOfNeuronWeb.Guess);
 
-            toolStripStatusLabel1.Text = "ИИ считает, что это буква – " + guess.ToUpper();
-            toolStripStatusLabel1.BackColor = Color.Aqua;
-
-            toolStripTextBoxTrueSymbol.Text = guess;
-            toolStripTextBoxTrueSymbol.Focus();
+            Bitmap AsInput = new Bitmap(bitmap, 30, 30);
+            pictureBox2.Image = new Bitmap(AsInput, 270, 270);
         }
 
         private void toolStripClean_Click(object sender, EventArgs e)
         {
-
-            toolStripStatusLabel1.Text = "Нарисуйте букву для ИИ";
-            guess = "";
-            toolStripTextBoxTrueSymbol.Text = "";
             Clear();
         }
 
 
         private void toolStripTrain_Click(object sender, EventArgs e)
         {
-            if (toolStripTextBoxTrueSymbol.Text == string.Empty)
-            {
-                MessageBox.Show("Напишите правильную букву");
-                return;
-            }
-            string trueName = toolStripTextBoxTrueSymbol.Text;
-            string falseName = guess;
-
-            neuronWeb.Train(trueName, falseName);
-
-            toolStripTextBoxTrueSymbol.Text = "";
-            toolStripStatusLabel1.Text = "ИИ понял свои ошибки, но не до конца. Продолжайте рисовать.";
-            toolStripStatusLabel1.BackColor = Color.OrangeRed;
+            neuronWeb.Train(toolStripTextBoxTrueSymbol.Text.ToLower(), guess);
+            pictureBox2.Image = Converter.ArrayToBMP(neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower()).weight);
+            ToAnswerNeuronWeb(answerOfNeuronWeb.Trained);
             Clear();
-            if (falseName == string.Empty)
-            {
-                Neuron trueNeuron = neuronWeb.FindNeuron(trueName);
-                Bitmap weightToBMP = Converter.ArrayToBMP(trueNeuron.weight);
-                pictureBox2.Image = new Bitmap(weightToBMP, pictureBox2.Width, pictureBox2.Height);
-            }
         }
 
 
@@ -195,7 +218,7 @@ namespace TextRecognizer
                     scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                     scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
 
-                    break;               
+                    break;
 
                 case 1:
                     pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -244,8 +267,8 @@ namespace TextRecognizer
             pictureBox1.Width = (int)(pictureBox1.Width * 1.2);
             pictureBox1.Height = (int)(pictureBox1.Height * 1.2);
 
-            pictureBox2.Width = (int)(pictureBox1.Width * 1.2);
-            pictureBox2.Height = (int)(pictureBox1.Height * 1.2);
+            pictureBox2.Width = (int)(pictureBox2.Width * 1.2);
+            pictureBox2.Height = (int)(pictureBox2.Height * 1.2);
 
             scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
             scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
@@ -260,8 +283,8 @@ namespace TextRecognizer
                 pictureBox1.Width = (int)(pictureBox1.Width / 1.2);
                 pictureBox1.Height = (int)(pictureBox1.Height / 1.2);
 
-                pictureBox2.Width = (int)(pictureBox1.Width / 1.2);
-                pictureBox2.Height = (int)(pictureBox1.Height / 1.2);
+                pictureBox2.Width = (int)(pictureBox2.Width / 1.2);
+                pictureBox2.Height = (int)(pictureBox2.Height / 1.2);
 
                 scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                 scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
@@ -271,3 +294,4 @@ namespace TextRecognizer
         }
     }
 }
+

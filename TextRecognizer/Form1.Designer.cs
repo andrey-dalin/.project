@@ -47,6 +47,7 @@
             this.toolStripComboScale = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripPlus = new System.Windows.Forms.ToolStripButton();
             this.toolStripMinus = new System.Windows.Forms.ToolStripButton();
+            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -108,7 +109,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(0, 26);
             this.pictureBox1.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(270, 270);
+            this.pictureBox1.Size = new System.Drawing.Size(30, 30);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseDown);
@@ -118,15 +119,17 @@
             // 
             this.pictureBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox2.Location = new System.Drawing.Point(0, 26);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(270, 270);
+            this.pictureBox2.Size = new System.Drawing.Size(30, 30);
             this.pictureBox2.TabIndex = 1;
             this.pictureBox2.TabStop = false;
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
+            this.toolStripStatusLabel1,
+            this.toolStripStatusLabel2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 416);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(800, 34);
@@ -185,8 +188,8 @@
             this.toolStripClean.Image = ((System.Drawing.Image)(resources.GetObject("toolStripClean.Image")));
             this.toolStripClean.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripClean.Name = "toolStripClean";
-            this.toolStripClean.Size = new System.Drawing.Size(131, 34);
-            this.toolStripClean.Text = "Правильно";
+            this.toolStripClean.Size = new System.Drawing.Size(109, 34);
+            this.toolStripClean.Text = "Очистить";
             this.toolStripClean.Click += new System.EventHandler(this.toolStripClean_Click);
             // 
             // toolStripSeparator2
@@ -253,6 +256,12 @@
             this.toolStripMinus.Text = "toolStripButton2";
             this.toolStripMinus.Click += new System.EventHandler(this.toolStripMinus_Click);
             // 
+            // toolStripStatusLabel2
+            // 
+            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 29);
+            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -300,6 +309,7 @@
         private System.Windows.Forms.ToolStripButton toolStripMinus;
         private System.Windows.Forms.ToolStripComboBox toolStripComboScale;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 
