@@ -50,13 +50,13 @@ namespace TextRecognizer
             if (input == null)
                 throw new ArgumentNullException("input", "SetInput is null");
 
-            
+           Bitmap scaledInput = new Bitmap(input, ResolutionX, ResolutionY);
 
             for (int i = 0; i < Neurons.Length; i++)
-                for (int x = 0; x < input.Width; x++)
-                    for (int y = 0; y < input.Height; y++)
+                for (int x = 0; x < ResolutionX; x++)
+                    for (int y = 0; y < ResolutionY; y++)
                     {
-                        float colorOfPixel = Convert.ToInt32(input.GetPixel(x, y).R);
+                        float colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
 
                         if (Neuron.IsWhite(colorOfPixel))
                         {

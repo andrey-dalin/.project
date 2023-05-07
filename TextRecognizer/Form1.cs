@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,7 @@ namespace TextRecognizer
 
         private Graphics graphics;
 
-        private Pen pen = new Pen(Color.Black, 5f);
+        private Pen pen = new Pen(Color.Black, 30f);
 
         private NeuronWeb neuronWeb = new NeuronWeb();
 
@@ -62,6 +63,8 @@ namespace TextRecognizer
             pictureBox2.Image = bitmap;
             graphics = Graphics.FromImage(bitmap);
 
+            pictureBox1.Size = bitmap.Size;
+            pictureBox2.Size = bitmap.Size;
 
             scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
             scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
@@ -101,14 +104,14 @@ namespace TextRecognizer
         {
             if (e.Button == MouseButtons.Left)
             {
-                Graphics g = Graphics.FromImage(bitmap);
+                graphics = Graphics.FromImage(bitmap);
                 endX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
                 endY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
                 Point start = new Point(startX, startY);
                 Point end = new Point(endX, endY);
                 if (startX != 0 & startY != 0)
                 {
-                    g.DrawLine(pen, start, end);
+                    graphics.DrawLine(pen, start, end);
                     pictureBox1.Image = bitmap;
                     startX = endX;
                     startY = endY;
@@ -187,8 +190,12 @@ namespace TextRecognizer
             }
 
             ToAnswerNeuronWeb(answerOfNeuronWeb.Guess);
-            pictureBox2.Image = Converter.ArrayToBMP(neuronWeb.FindNeuron(guess).weight);
-
+            Bitmap temp = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+            Graphics g = Graphics.FromImage(temp);
+            RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
+            Bitmap weightInBMP = Converter.ArrayToBMP(neuronWeb.FindNeuron(guess).weight);
+            g.DrawImage(weightInBMP, rectangle);
+            pictureBox2.Image = temp;
         }
 
         private void toolStripClean_Click(object sender, EventArgs e)
@@ -200,10 +207,24 @@ namespace TextRecognizer
 
         private void toolStripTrain_Click(object sender, EventArgs e)
         {
+            if (toolStripTextBoxTrueSymbol.Text == string.Empty)
+            {
+                ToAnswerNeuronWeb(answerOfNeuronWeb.WriteTrueSymbol);
+                return;
+            }
+
             neuronWeb.SetInput(bitmap);
             neuronWeb.Train(toolStripTextBoxTrueSymbol.Text.ToLower(), guess);
-            pictureBox2.Image = Converter.ArrayToBMP(neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower()).weight);
             
+
+            Bitmap temp = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+            Graphics g = Graphics.FromImage(temp);
+            RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
+            Bitmap weightInBMP = Converter.ArrayToBMP(neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower()).weight);
+            g.DrawImage(weightInBMP, rectangle);
+            pictureBox2.Image = temp;
+
+
             Neuron neuron = neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower());
             float sum = 0;
             
@@ -219,6 +240,10 @@ namespace TextRecognizer
 
             toolStripStatusLabel1.Text = sum.ToString();
             Clear();
+            int sumOfFonts;
+            InstalledFontCollection fonts = new InstalledFontCollection();
+            sumOfFonts = fonts.Families.Length;
+            toolStripStatusLabel2.Text = sumOfFonts.ToString();
         }
 
 
@@ -229,12 +254,11 @@ namespace TextRecognizer
             switch (toolStripComboScale.SelectedIndex)
             {
                 case 0:
-                    pictureBox1.Size = bitmap.Size;
                     pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
                     pictureBox1.Dock = DockStyle.None;
                     pictureBox1.BorderStyle = BorderStyle.FixedSingle;
 
-                    pictureBox2.Size = bitmap.Size;
+                   
                     pictureBox2.SizeMode = PictureBoxSizeMode.Normal;
                     pictureBox2.Dock = DockStyle.None;
                     pictureBox2.BorderStyle = BorderStyle.FixedSingle;

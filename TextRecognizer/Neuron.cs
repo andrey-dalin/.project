@@ -17,7 +17,7 @@ namespace TextRecognizer
         public float[,] weight;
         public float[,] input;
         public float sumOfMatches;
-        public float limit = 300f;
+        public float limit = 250;
         public bool hasPath;
 
         public Neuron(string name)
