@@ -98,8 +98,14 @@ namespace TextRecognizer
 
             numberInArray = Array.FindIndex(sums, (float match) => match == maxBlackInSums);
 
-
-            return Neurons[numberInArray].name;
+            if (Neurons[numberInArray].sumOfMatches >= Neurons[numberInArray].limit)
+            {
+                return Neurons[numberInArray].name;
+            }
+            else
+            {
+                return string.Empty;
+            }
           
         }
         public string Recognize(Bitmap input)

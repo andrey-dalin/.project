@@ -45,7 +45,8 @@ namespace TextRecognizer
             Guess,
             DrawSymbol,
             WriteTrueSymbol,
-            Trained
+            Trained,
+            PictureClean
         };
 
         private void MyInitialize()
@@ -58,6 +59,7 @@ namespace TextRecognizer
         
 
             pictureBox1.Image = bitmap;
+            pictureBox2.Image = bitmap;
             graphics = Graphics.FromImage(bitmap);
 
 
@@ -138,21 +140,30 @@ namespace TextRecognizer
 
                 case answerOfNeuronWeb.DrawSymbol:
                     toolStripStatusLabel1.Text = "ИИ: нарисуйте букву.";
-
+                    guess = string.Empty;
                     toolStripStatusLabel1.BackColor = Color.OrangeRed;
                     break;
 
                 case answerOfNeuronWeb.WriteTrueSymbol:
                     toolStripStatusLabel1.Text = "ИИ: напишите правильную букву, чтобы обучить.";
-
+                    guess = string.Empty;
                     toolStripStatusLabel1.BackColor = Color.OrangeRed;
                     break;
 
                 case answerOfNeuronWeb.Trained:
                     toolStripStatusLabel1.Text = "ИИ: понял свои ошибки. Продолжайте рисовать.";
+                    guess = string.Empty;
                     toolStripTextBoxTrueSymbol.Text = string.Empty;
 
                     toolStripStatusLabel1.BackColor = Color.Orange;
+                    break;
+
+                case answerOfNeuronWeb.PictureClean:
+                    toolStripStatusLabel1.Text = "ИИ: холст очищен. Начинайте рисовать.";
+                    guess = string.Empty;
+                    toolStripTextBoxTrueSymbol.Text = string.Empty;
+
+                    toolStripStatusLabel1.BackColor = Color.Green;
                     break;
             }
         }
@@ -161,6 +172,8 @@ namespace TextRecognizer
 
             graphics.Clear(Color.White);
             pictureBox1.Image = bitmap;
+            
+            
         }
 
         private void toolStripRecognize_Click(object sender, EventArgs e)
@@ -174,22 +187,37 @@ namespace TextRecognizer
             }
 
             ToAnswerNeuronWeb(answerOfNeuronWeb.Guess);
+            pictureBox2.Image = Converter.ArrayToBMP(neuronWeb.FindNeuron(guess).weight);
 
-            Bitmap AsInput = new Bitmap(bitmap, 30, 30);
-            pictureBox2.Image = new Bitmap(AsInput, 270, 270);
         }
 
         private void toolStripClean_Click(object sender, EventArgs e)
         {
             Clear();
+            ToAnswerNeuronWeb(answerOfNeuronWeb.PictureClean);
         }
 
 
         private void toolStripTrain_Click(object sender, EventArgs e)
         {
+            neuronWeb.SetInput(bitmap);
             neuronWeb.Train(toolStripTextBoxTrueSymbol.Text.ToLower(), guess);
             pictureBox2.Image = Converter.ArrayToBMP(neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower()).weight);
+            
+            Neuron neuron = neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower());
+            float sum = 0;
+            
+            for (int x = 0; x < neuron.weight.GetLength(1); x++)
+            {
+                for (int y = 0; y < neuron.weight.GetLength(0); y++)
+                {
+                    sum += neuron.weight[y, x];
+                }
+            }
+
             ToAnswerNeuronWeb(answerOfNeuronWeb.Trained);
+
+            toolStripStatusLabel1.Text = sum.ToString();
             Clear();
         }
 

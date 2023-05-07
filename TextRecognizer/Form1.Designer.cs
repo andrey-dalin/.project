@@ -47,7 +47,6 @@
             this.toolStripComboScale = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripPlus = new System.Windows.Forms.ToolStripButton();
             this.toolStripMinus = new System.Windows.Forms.ToolStripButton();
-            this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -128,8 +127,7 @@
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1,
-            this.toolStripStatusLabel2});
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 416);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(800, 34);
@@ -256,12 +254,6 @@
             this.toolStripMinus.Text = "toolStripButton2";
             this.toolStripMinus.Click += new System.EventHandler(this.toolStripMinus_Click);
             // 
-            // toolStripStatusLabel2
-            // 
-            this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(118, 29);
-            this.toolStripStatusLabel2.Text = "toolStripStatusLabel2";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -309,7 +301,6 @@
         private System.Windows.Forms.ToolStripButton toolStripMinus;
         private System.Windows.Forms.ToolStripComboBox toolStripComboScale;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
     }
 }
 
