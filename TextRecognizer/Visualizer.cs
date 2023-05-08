@@ -35,12 +35,16 @@ namespace TextRecognizer
         public static void SaveImage(string path, float[,] array)
         {
             Bitmap bitmap = ArrayToBMP(array);
-            bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Bmp);
+            bitmap.Save(path +".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
         }
 
         public static void CreateSamplesFolder(string path)
         {
             Directory.CreateDirectory(path);
+        }
+        public static void DeleteSamplesFolder(string path)
+        {
+            Directory.Delete(path, true);
         }
     }
 }

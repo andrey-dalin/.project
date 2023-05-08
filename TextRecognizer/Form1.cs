@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace TextRecognizer
 {
@@ -22,6 +23,7 @@ namespace TextRecognizer
             MyInitialize();
             StartNeuronWeb();
             toolStripComboScale.SelectedIndex = 0;
+            InputLanguage.CurrentInputLanguage = InputLanguage.DefaultInputLanguage;
         }
         private string pathOfSamples = AppDomain.CurrentDomain.BaseDirectory + "samples\\";
         private int iterationOfSampleGroup;
@@ -43,7 +45,8 @@ namespace TextRecognizer
             DrawSymbol,
             WriteTrueSymbol,
             Trained,
-            PictureClean
+            PictureClean,
+            PutRussianLayout
         };
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -96,6 +99,11 @@ namespace TextRecognizer
             if (toolStripTextBoxTrueSymbol.Text == string.Empty)
             {
                 ToAnswer(answers.WriteTrueSymbol);
+                return;
+            }
+            if (Array.FindIndex(neuronWeb.Neurons, x => x.name == toolStripTextBoxTrueSymbol.Text.ToLower()) < 0)
+            {
+                ToAnswer(answers.PutRussianLayout);
                 return;
             }
 
@@ -207,6 +215,10 @@ namespace TextRecognizer
                 scale = (int)(scale / 1.2);
             }
         }
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Visualizer.DeleteSamplesFolder(pathOfSamples);
+        }
 
         //private methods
         private void MyInitialize()
@@ -304,6 +316,14 @@ namespace TextRecognizer
                     toolStripTextBoxTrueSymbol.Text = string.Empty;
 
                     toolStripStatusLabel1.BackColor = Color.Green;
+                    break;
+
+                case answers.PutRussianLayout:
+                    toolStripStatusLabel1.Text = "ИИ: поставьте русскую раскладку.";
+                    guess = string.Empty;
+                    toolStripTextBoxTrueSymbol.Text = string.Empty;
+
+                    toolStripStatusLabel1.BackColor = Color.OrangeRed;
                     break;
             }
         }
