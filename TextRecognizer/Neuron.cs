@@ -17,7 +17,7 @@ namespace TextRecognizer
         public float[,] weight;
         public float[,] input;
         public float sumOfMatches;
-        public float limit = 250;
+        public float limit = 180;
         public bool hasPath;
 
         public Neuron(string name)
@@ -25,11 +25,11 @@ namespace TextRecognizer
             this.name = name;
         }
 
-        public void MakePathBMPOfWeight(string name, string pathOfFolder)
+        public void MakePathOfWeightBMP(string name, string pathOfFolder)
         {
             if (hasPath == false)
             {
-                pathToBMP = @pathOfFolder + "\\" + name + ".bmp";
+                pathToBMP = @pathOfFolder + "\\" + name;
                 //File.Create(@"A:\Andrey\.project\TextRecognizer\resource\letters\" + name + ".bmp").Close();             
 
                 hasPath = true;

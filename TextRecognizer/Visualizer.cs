@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace TextRecognizer
 {
-    public static class Converter
+    public static class Visualizer
     {
+        public static string weightSuffix = "weight";
+        public static string inputSuffix = "input";
+        public static string matchesSuffix = "matches";
+
         public static Bitmap ArrayToBMP(float[,] array)
         {
             Bitmap bitmap = new Bitmap(NeuronWeb.ResolutionX, NeuronWeb.ResolutionY);
@@ -22,6 +27,20 @@ namespace TextRecognizer
                     bitmap.SetPixel(x, y, color);
                 }
             return bitmap;
+        }
+        public static void SaveImage(string path, Bitmap bitmap)
+        {            
+            bitmap.Save(path + ".bmp");
+        }
+        public static void SaveImage(string path, float[,] array)
+        {
+            Bitmap bitmap = ArrayToBMP(array);
+            bitmap.Save(path, System.Drawing.Imaging.ImageFormat.Bmp);
+        }
+
+        public static void CreateSamplesFolder(string path)
+        {
+            Directory.CreateDirectory(path);
         }
     }
 }

@@ -23,24 +23,20 @@ namespace TextRecognizer
             StartNeuronWeb();
             toolStripComboScale.SelectedIndex = 0;
         }
-        int startX, startY, endX, endY = 0;
-
-        double scaleX;
-        double scaleY;
-
+        private string pathOfSamples = AppDomain.CurrentDomain.BaseDirectory + "samples\\";
+        private int iterationOfSampleGroup;
+        private int startX, startY, endX, endY = 0;
+        private double scaleX;
+        private double scaleY;
         private int scale = 100;
-
-        Bitmap bitmap;
-
+        private Bitmap inputPicture;
+        private Bitmap weightPicture;
         private Graphics graphics;
-
         private Pen pen = new Pen(Color.Black, 30f);
-
         private NeuronWeb neuronWeb = new NeuronWeb();
-
         private string guess = string.Empty;
 
-        private enum answerOfNeuronWeb
+        private enum answers
         {
             CannotGuess,
             Guess,
@@ -49,62 +45,16 @@ namespace TextRecognizer
             Trained,
             PictureClean
         };
-
-        private void MyInitialize()
-        {
-            bitmap = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-
-            for (int x = 0; x < pictureBox1.Width; x++)
-                for (int y = 0; y < pictureBox1.Height; y++)
-                    bitmap.SetPixel(x, y, Color.White);
-        
-
-            pictureBox1.Image = bitmap;
-            pictureBox2.Image = bitmap;
-            graphics = Graphics.FromImage(bitmap);
-
-            pictureBox1.Size = bitmap.Size;
-            pictureBox2.Size = bitmap.Size;
-
-            scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-            scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
-            graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-
-            pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
-            pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
-        }
-
-        private void StartNeuronWeb()
-        {
-            int numberOfRussianLetters = 33;
-            string pathOfFolder = "A:\\Andrey\\.project\\TextRecognizer\\resource\\letters";
-
-            neuronWeb.Neurons = new Neuron[numberOfRussianLetters];
-
-            //Создаём имя для каждого нейрона
-            neuronWeb.NamingNeurons();
-
-            //Создаём путь для дальнейшего сохранения веса
-            neuronWeb.MakePathForEveryone(pathOfFolder);
-
-            //Задаём разрешение 
-            neuronWeb.SetResolutionForEveryone();
-        }
-
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             startX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
             startY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
         }
-
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
-                graphics = Graphics.FromImage(bitmap);
+                graphics = Graphics.FromImage(inputPicture);
                 endX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
                 endY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
                 Point start = new Point(startX, startY);
@@ -112,143 +62,58 @@ namespace TextRecognizer
                 if (startX != 0 & startY != 0)
                 {
                     graphics.DrawLine(pen, start, end);
-                    pictureBox1.Image = bitmap;
+                    pictureBox1.Image = inputPicture;
                     startX = endX;
                     startY = endY;
                 }
 
             }
         }
-
-
-        private void ToAnswerNeuronWeb(answerOfNeuronWeb answerOfNeuronWeb)
-        {
-            switch (answerOfNeuronWeb)
-            {
-                case answerOfNeuronWeb.CannotGuess:
-                    toolStripStatusLabel1.Text = "ИИ: не могу угадать букву. Напишите правильную букву и нажмите обучить";
-                    guess = string.Empty;
-                    toolStripStatusLabel1.BackColor = Color.DeepPink;
-                    toolStripTextBoxTrueSymbol.Focus();
-                    break;
-
-                case answerOfNeuronWeb.Guess:
-                    toolStripStatusLabel1.Text = "ИИ: я думаю это буква" + " " + guess + ".";
-                    if (guess == string.Empty)
-                        throw new Exception("guess is empty string");
-
-                    toolStripStatusLabel1.BackColor = Color.DeepSkyBlue;
-                    toolStripTextBoxTrueSymbol.Focus();
-                    break;
-
-                case answerOfNeuronWeb.DrawSymbol:
-                    toolStripStatusLabel1.Text = "ИИ: нарисуйте букву.";
-                    guess = string.Empty;
-                    toolStripStatusLabel1.BackColor = Color.OrangeRed;
-                    break;
-
-                case answerOfNeuronWeb.WriteTrueSymbol:
-                    toolStripStatusLabel1.Text = "ИИ: напишите правильную букву, чтобы обучить.";
-                    guess = string.Empty;
-                    toolStripStatusLabel1.BackColor = Color.OrangeRed;
-                    break;
-
-                case answerOfNeuronWeb.Trained:
-                    toolStripStatusLabel1.Text = "ИИ: понял свои ошибки. Продолжайте рисовать.";
-                    guess = string.Empty;
-                    toolStripTextBoxTrueSymbol.Text = string.Empty;
-
-                    toolStripStatusLabel1.BackColor = Color.Orange;
-                    break;
-
-                case answerOfNeuronWeb.PictureClean:
-                    toolStripStatusLabel1.Text = "ИИ: холст очищен. Начинайте рисовать.";
-                    guess = string.Empty;
-                    toolStripTextBoxTrueSymbol.Text = string.Empty;
-
-                    toolStripStatusLabel1.BackColor = Color.Green;
-                    break;
-            }
-        }
-        private void Clear()
-        {
-
-            graphics.Clear(Color.White);
-            pictureBox1.Image = bitmap;
-            
-            
-        }
-
         private void toolStripRecognize_Click(object sender, EventArgs e)
         {
-            guess = neuronWeb.Recognize(bitmap);
+            guess = neuronWeb.Recognize(inputPicture);            
 
             if (guess == string.Empty)
             {
-                ToAnswerNeuronWeb(answerOfNeuronWeb.CannotGuess);
+                ToAnswer(answers.CannotGuess);
+                SaveSamples();
                 return;
             }
 
-            ToAnswerNeuronWeb(answerOfNeuronWeb.Guess);
-            Bitmap temp = new Bitmap(pictureBox2.Width, pictureBox2.Height);
-            Graphics g = Graphics.FromImage(temp);
-            RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
-            Bitmap weightInBMP = Converter.ArrayToBMP(neuronWeb.FindNeuron(guess).weight);
-            g.DrawImage(weightInBMP, rectangle);
-            pictureBox2.Image = temp;
-        }
+            ToAnswer(answers.Guess);
 
+            ShowWeight(guess);
+            SaveSamples();
+            
+        }
         private void toolStripClean_Click(object sender, EventArgs e)
         {
             Clear();
-            ToAnswerNeuronWeb(answerOfNeuronWeb.PictureClean);
+            ToAnswer(answers.PictureClean);
         }
-
-
         private void toolStripTrain_Click(object sender, EventArgs e)
         {
             if (toolStripTextBoxTrueSymbol.Text == string.Empty)
             {
-                ToAnswerNeuronWeb(answerOfNeuronWeb.WriteTrueSymbol);
+                ToAnswer(answers.WriteTrueSymbol);
                 return;
             }
 
-            neuronWeb.SetInput(bitmap);
+            neuronWeb.SetInput(inputPicture);
             neuronWeb.Train(toolStripTextBoxTrueSymbol.Text.ToLower(), guess);
-            
 
-            Bitmap temp = new Bitmap(pictureBox2.Width, pictureBox2.Height);
-            Graphics g = Graphics.FromImage(temp);
-            RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
-            Bitmap weightInBMP = Converter.ArrayToBMP(neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower()).weight);
-            g.DrawImage(weightInBMP, rectangle);
-            pictureBox2.Image = temp;
+            ShowWeight(toolStripTextBoxTrueSymbol.Text.ToLower());
+            SaveSamples();
+            ToAnswer(answers.Trained);
 
-
-            Neuron neuron = neuronWeb.FindNeuron(toolStripTextBoxTrueSymbol.Text.ToLower());
-            float sum = 0;
-            
-            for (int x = 0; x < neuron.weight.GetLength(1); x++)
-            {
-                for (int y = 0; y < neuron.weight.GetLength(0); y++)
-                {
-                    sum += neuron.weight[y, x];
-                }
-            }
-
-            ToAnswerNeuronWeb(answerOfNeuronWeb.Trained);
-
-            toolStripStatusLabel1.Text = sum.ToString();
             Clear();
-            int sumOfFonts;
-            InstalledFontCollection fonts = new InstalledFontCollection();
-            sumOfFonts = fonts.Families.Length;
-            toolStripStatusLabel2.Text = sumOfFonts.ToString();
+            //int sumOfFonts;
+            //InstalledFontCollection fonts = new InstalledFontCollection();
+            //sumOfFonts = fonts.Families.Length;
+            //toolStripStatusLabel2.Text = sumOfFonts.ToString();
+
+            
         }
-
-
-
-
         private void toolStripComboScale_SelectedIndexChanged(object sender, EventArgs e)
         {
             switch (toolStripComboScale.SelectedIndex)
@@ -311,7 +176,6 @@ namespace TextRecognizer
 
             }
         }
-
         private void toolStripPlus_Click(object sender, EventArgs e)
         {
 
@@ -327,7 +191,6 @@ namespace TextRecognizer
 
             scale = (int)(scale * 1.2);
         }
-
         private void toolStripMinus_Click(object sender, EventArgs e)
         {
             if (pictureBox1.Width > 12 & pictureBox1.Height > 12)
@@ -343,6 +206,134 @@ namespace TextRecognizer
 
                 scale = (int)(scale / 1.2);
             }
+        }
+
+        //private methods
+        private void MyInitialize()
+        {
+            iterationOfSampleGroup = 0;
+            Visualizer.CreateSamplesFolder(pathOfSamples);
+
+            inputPicture = new Bitmap(pictureBox1.Width, pictureBox1.Height);
+            weightPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+
+            for (int x = 0; x < pictureBox1.Width; x++)
+                for (int y = 0; y < pictureBox1.Height; y++)
+                {
+                    inputPicture.SetPixel(x, y, Color.White);
+                    weightPicture.SetPixel(x, y, Color.White);
+                }
+        
+
+            pictureBox1.Image = inputPicture;
+            pictureBox2.Image = weightPicture;
+            graphics = Graphics.FromImage(inputPicture);
+
+            pictureBox1.Size = inputPicture.Size;
+            pictureBox2.Size = inputPicture.Size;
+
+            scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
+            scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
+
+            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+            graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+
+            pen.StartCap = System.Drawing.Drawing2D.LineCap.Round;
+            pen.EndCap = System.Drawing.Drawing2D.LineCap.Round;
+        }
+        private void StartNeuronWeb()
+        {
+            int numberOfRussianLetters = 33;
+            string pathOfFolder = AppDomain.CurrentDomain.BaseDirectory + "\\weight";
+
+            neuronWeb.Neurons = new Neuron[numberOfRussianLetters];
+
+            //Создаём имя для каждого нейрона
+            neuronWeb.NamingNeurons();
+
+            //Создаём путь для дальнейшего сохранения веса
+            neuronWeb.MakePathForEveryone(pathOfFolder);
+
+            //Задаём разрешение 
+            neuronWeb.SetResolutionForEveryone();
+        }
+        private void ToAnswer(answers answerOfNeuronWeb)
+        {
+            switch (answerOfNeuronWeb)
+            {
+                case answers.CannotGuess:
+                    toolStripStatusLabel1.Text = "ИИ: не могу угадать букву. Напишите правильную букву и нажмите обучить";
+                    guess = string.Empty;
+                    toolStripStatusLabel1.BackColor = Color.DeepPink;
+                    toolStripTextBoxTrueSymbol.Focus();
+                    break;
+
+                case answers.Guess:
+                    toolStripStatusLabel1.Text = "ИИ: я думаю это буква" + " " + guess + ".";
+                    if (guess == string.Empty)
+                        throw new Exception("guess is empty string");
+
+                    toolStripStatusLabel1.BackColor = Color.DeepSkyBlue;
+                    toolStripTextBoxTrueSymbol.Focus();
+                    break;
+
+                case answers.DrawSymbol:
+                    toolStripStatusLabel1.Text = "ИИ: нарисуйте букву.";
+                    guess = string.Empty;
+                    toolStripStatusLabel1.BackColor = Color.OrangeRed;
+                    break;
+
+                case answers.WriteTrueSymbol:
+                    toolStripStatusLabel1.Text = "ИИ: напишите правильную букву, чтобы обучить.";
+                    guess = string.Empty;
+                    toolStripStatusLabel1.BackColor = Color.OrangeRed;
+                    break;
+
+                case answers.Trained:
+                    toolStripStatusLabel1.Text = "ИИ: понял свои ошибки. Продолжайте рисовать.";
+                    guess = string.Empty;
+                    toolStripTextBoxTrueSymbol.Text = string.Empty;
+
+                    toolStripStatusLabel1.BackColor = Color.Orange;
+                    break;
+
+                case answers.PictureClean:
+                    toolStripStatusLabel1.Text = "ИИ: холст очищен. Начинайте рисовать.";
+                    guess = string.Empty;
+                    toolStripTextBoxTrueSymbol.Text = string.Empty;
+
+                    toolStripStatusLabel1.BackColor = Color.Green;
+                    break;
+            }
+        }
+        private void Clear()
+        {
+
+            graphics.Clear(Color.White);
+            pictureBox1.Image = inputPicture;
+            
+            
+        }
+        private void ShowWeight(string symbol)
+        {
+            weightPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+            Graphics g = Graphics.FromImage(weightPicture);
+            RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
+            Bitmap weightInBMP = Visualizer.ArrayToBMP(neuronWeb.FindNeuron(symbol).weight);
+            g.DrawImage(weightInBMP, rectangle);
+            pictureBox2.Image = weightPicture;
+        }
+        private void SaveSamples()
+        {
+            if (guess != string.Empty)
+            {
+                Neuron tempNeuron = neuronWeb.FindNeuron(guess);
+                Visualizer.SaveImage(pathOfSamples + iterationOfSampleGroup + Visualizer.matchesSuffix, tempNeuron.matches);                
+            }
+            Visualizer.SaveImage(pathOfSamples + iterationOfSampleGroup + Visualizer.inputSuffix, inputPicture);
+            Visualizer.SaveImage(pathOfSamples + iterationOfSampleGroup + Visualizer.weightSuffix, weightPicture);
+            iterationOfSampleGroup++;
         }
     }
 }

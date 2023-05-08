@@ -37,7 +37,7 @@ namespace TextRecognizer
 
         public void MakePathForEveryone(string pathOfFolder)
         {
-            foreach (Neuron neuron in Neurons) neuron.MakePathBMPOfWeight(neuron.name, pathOfFolder);
+            foreach (Neuron neuron in Neurons) neuron.MakePathOfWeightBMP(neuron.name, pathOfFolder);
         }
 
         public void SetResolutionForEveryone()
