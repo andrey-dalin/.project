@@ -40,11 +40,12 @@ namespace TextRecognizer
         }
         public void SaveWeights()
         {
-            foreach (Neuron neuron in Neurons) neuron.SaveWeights();
+            Properties.Settings.Default.Weights = Neurons;
+            Properties.Settings.Default.Save();
         }
         public void GetLocalWeights()
         {
-            foreach (Neuron neuron in Neurons) neuron.GetLocalWeights();
+            Neurons = Properties.Settings.Default.Weights;
         }
         public void SetInput(Bitmap input)
         {

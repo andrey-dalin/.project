@@ -41,7 +41,7 @@ namespace TextRecognizer
             return pixel > MyColors.NearWhite;
         }
 
-        public void SaveWeights()
+        public void SaveWeightsTXT()
         {
             File.Create(AppDomain.CurrentDomain.BaseDirectory + "\\weights\\" + name + ".txt").Close();
 
@@ -59,7 +59,7 @@ namespace TextRecognizer
             streamWriter.Close();
         }
 
-        public void GetLocalWeights()
+        public void GetLocalWeightsTXT()
         {
             StreamReader streamReader = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "\\weights\\" + name + ".txt");
             string textOfWeights = streamReader.ReadToEnd();
@@ -90,7 +90,7 @@ namespace TextRecognizer
                     }
                 }
             streamReader.Close();
-        }
+        }        
     }
 }
 
