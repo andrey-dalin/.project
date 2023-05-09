@@ -115,13 +115,7 @@ namespace TextRecognizer
             SaveSamples();
             ToAnswer(answers.Trained);
 
-            Clear();
-            //int sumOfFonts;
-            //InstalledFontCollection fonts = new InstalledFontCollection();
-            //sumOfFonts = fonts.Families.Length;
-            //toolStripStatusLabel2.Text = sumOfFonts.ToString();
-
-            
+            Clear();            
         }
         private void toolStripComboScale_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -229,7 +223,7 @@ namespace TextRecognizer
             neuronWeb.GetLocalWeights();
             ToAnswer(answers.LocalWeight);
         }
-        //private methods
+        //methods
         private void MyInitialize()
         {
             iterationOfSampleGroup = 0;
