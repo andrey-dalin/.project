@@ -1,0 +1,11 @@
+A:\Andrey\.project\TextRecognizer\bin\Release\TextRecognizer.exe.config
+A:\Andrey\.project\TextRecognizer\bin\Release\TextRecognizer.exe
+A:\Andrey\.project\TextRecognizer\bin\Release\TextRecognizer.pdb
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.csproj.AssemblyReference.cache
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.csproj.SuggestedBindingRedirects.cache
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.Form1.resources
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.Properties.Resources.resources
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.csproj.GenerateResource.cache
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.csproj.CoreCompileInputs.cache
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.exe
+A:\Andrey\.project\TextRecognizer\obj\Release\TextRecognizer.pdb

@@ -19,30 +19,16 @@ namespace TextRecognizer
     public class Neuron
     {
         public string name;
-        public string pathToBMP;
         public float[,] matches;
         public float[,] weight;
         public float[,] input;
         public float sumOfMatches;
         public float limit = 180;
-        public bool hasPath;
 
         public Neuron(string name)
         {
             this.name = name;
         }
-
-        public void MakePathOfWeightBMP(string name, string pathOfFolder)
-        {
-            if (hasPath == false)
-            {
-                pathToBMP = @pathOfFolder + "\\" + name;
-                //File.Create(@"A:\Andrey\.project\TextRecognizer\resource\letters\" + name + ".bmp").Close();             
-
-                hasPath = true;
-            }
-        }
-
         public void SetResolution(int width, int height)
         {
             matches = new float[height, width];
@@ -64,15 +50,11 @@ namespace TextRecognizer
             for (int y = 0; y < NeuronWeb.ResolutionY; y++)
                 for (int x = 0; x < NeuronWeb.ResolutionX; x++)
                 {
-
-                    //writer.Write(weight[y, x] + " ");
                     if (x == 0 & y != 0)
                     {
-                        //writer.WriteLine();
                         streamWriter.WriteLine();
                     }
-                    streamWriter.Write(weight[y, x] + " ");
-
+                    streamWriter.Write(Math.Round(weight[y, x], 1) + " ");
                 }
             streamWriter.Close();
         }
@@ -80,40 +62,34 @@ namespace TextRecognizer
         public void GetLocalWeights()
         {
             StreamReader streamReader = new StreamReader(AppDomain.CurrentDomain.BaseDirectory + "\\weights\\" + name + ".txt");
-            char[] textOfWeights = streamReader.ReadToEnd().ToCharArray();
+            string textOfWeights = streamReader.ReadToEnd();
             int i = 0;
-            int x = 0;
-            int y = 0;
 
-            //for (int y = 0; y < NeuronWeb.ResolutionY; y++)
-            //    for (int x = 0; x < NeuronWeb.ResolutionX; x++)
-            //    {
-            //        if (textOfWeights[i] == ',')
-            //        {
-            //            weight[y - 1, x - 1] = Convert.ToSingle(textOfWeights[i - 1] + textOfWeights[i] + textOfWeights[i + 1]);
-            //            i += 2;
-            //        }
-            //        if (textOfWeights[i] == '0')
-            //        {
-            //            weight[y, x] = 0;
-            //        }
-            //        if (textOfWeights[i] == '1')
-            //        {
-            //            weight[y, x] = 1;
-            //        }
-            //        i++;
-            while (i < textOfWeights.Length)
-            {
-                string temp = string.Empty;
-                while (textOfWeights[i] != ' ' | textOfWeights[i] != '\n')
+            for (int y = 0; y < NeuronWeb.ResolutionY; y++)
+                for (int x = 0; x < NeuronWeb.ResolutionX; x++)
                 {
-                    temp.Append(textOfWeights[i]);
+                    if (textOfWeights[i] == ' ') i++;
+                    if (textOfWeights[i] == '\r') i++;
+                    if (textOfWeights[i] == '\n') i++;
+                    if (textOfWeights[i] == '0' & textOfWeights[i + 1] == ' ')
+                    {
+                        weight[y, x] = 0;
+                        i += 2;
+                    }
+                    else if (textOfWeights[i] == '0' && textOfWeights[i + 1] == ',')
+                    {
+                        weight[y, x] = Convert.ToSingle(textOfWeights[i].ToString() +
+                            textOfWeights[i + 1].ToString() +
+                            textOfWeights[i + 2].ToString());
+                        i += 3;
+                    }
+                    else if (textOfWeights[i] == '1' & textOfWeights[i + 1] == ' ')
+                    {
+                        weight[y, x] = 1;
+                        i += 2;
+                    }
                 }
-                weight[y, x] = Convert.ToSingle(temp);
-                i++;
-                x++;
-                y++;
-            }
+            streamReader.Close();
         }
     }
 }

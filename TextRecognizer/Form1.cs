@@ -25,7 +25,6 @@ namespace TextRecognizer
             toolStripComboScale.SelectedIndex = 0;
             InputLanguage.CurrentInputLanguage = InputLanguage.FromCulture(System.Globalization.CultureInfo.GetCultureInfo("Ru"));
         }
-        private string pathOfSamples = AppDomain.CurrentDomain.BaseDirectory + "samples\\";
         private int iterationOfSampleGroup;
         private int startX, startY, endX, endY;
         private double scaleX;
@@ -219,7 +218,7 @@ namespace TextRecognizer
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Sampler.DeleteSamplesFolder(pathOfSamples);
+            Sampler.DeleteSamplesFolder();
         }
         private void toolStripSave_Click(object sender, EventArgs e)
         {
@@ -234,7 +233,7 @@ namespace TextRecognizer
         private void MyInitialize()
         {
             iterationOfSampleGroup = 0;
-            Sampler.CreateSamplesFolder(pathOfSamples);
+            Sampler.CreateSamplesFolder();
             neuronWeb.CreateWeightsFolder();
 
             inputPicture = new Bitmap(pictureBox1.Width, pictureBox1.Height);
@@ -270,17 +269,8 @@ namespace TextRecognizer
         private void StartNeuronWeb()
         {
             int numberOfRussianLetters = 33;
-            string pathOfFolder = AppDomain.CurrentDomain.BaseDirectory + "\\weight";
-
             neuronWeb.Neurons = new Neuron[numberOfRussianLetters];
-
-            //Создаём имя для каждого нейрона
             neuronWeb.NamingNeurons();
-
-            //Создаём путь для дальнейшего сохранения веса
-            neuronWeb.MakePathForEveryone(pathOfFolder);
-
-            //Задаём разрешение 
             neuronWeb.SetResolutionForEveryone();
         }
         private void ToAnswer(answers answerOfNeuronWeb)
@@ -384,10 +374,10 @@ namespace TextRecognizer
             if (guess != string.Empty)
             {
                 Neuron tempNeuron = neuronWeb.FindNeuron(guess);
-                Sampler.SaveImage(pathOfSamples + iterationOfSampleGroup + Sampler.matchesSuffix, tempNeuron.matches);                
+                Sampler.SaveImage(iterationOfSampleGroup + Sampler.matchesSuffix, tempNeuron.matches);                
             }
-            Sampler.SaveImage(pathOfSamples + iterationOfSampleGroup + Sampler.inputSuffix, inputPicture);
-            Sampler.SaveImage(pathOfSamples + iterationOfSampleGroup + Sampler.weightSuffix, weightPicture);
+            Sampler.SaveImage(iterationOfSampleGroup + Sampler.inputSuffix, inputPicture);
+            Sampler.SaveImage(iterationOfSampleGroup + Sampler.weightSuffix, weightPicture);
             iterationOfSampleGroup++;
         }
     }

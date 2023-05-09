@@ -46,9 +46,9 @@
             this.toolStripPlus = new System.Windows.Forms.ToolStripButton();
             this.toolStripMinus = new System.Windows.Forms.ToolStripButton();
             this.toolStripSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLocalWeights = new System.Windows.Forms.ToolStripButton();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripLocalWeights = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -252,6 +252,17 @@
             this.toolStripSave.Text = "Сохранить результат обучения";
             this.toolStripSave.Click += new System.EventHandler(this.toolStripSave_Click);
             // 
+            // toolStripLocalWeights
+            // 
+            this.toolStripLocalWeights.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripLocalWeights.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLocalWeights.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLocalWeights.Image")));
+            this.toolStripLocalWeights.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripLocalWeights.Name = "toolStripLocalWeights";
+            this.toolStripLocalWeights.Size = new System.Drawing.Size(262, 34);
+            this.toolStripLocalWeights.Text = "Начать с обученного ИИ";
+            this.toolStripLocalWeights.Click += new System.EventHandler(this.toolStripLocalWeights_Click);
+            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -268,17 +279,6 @@
             this.statusStrip1.Size = new System.Drawing.Size(1403, 64);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
-            // 
-            // toolStripLocalWeights
-            // 
-            this.toolStripLocalWeights.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripLocalWeights.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripLocalWeights.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLocalWeights.Image")));
-            this.toolStripLocalWeights.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripLocalWeights.Name = "toolStripLocalWeights";
-            this.toolStripLocalWeights.Size = new System.Drawing.Size(262, 34);
-            this.toolStripLocalWeights.Text = "Начать с обученного ИИ";
-            this.toolStripLocalWeights.Click += new System.EventHandler(this.toolStripLocalWeights_Click);
             // 
             // Form1
             // 

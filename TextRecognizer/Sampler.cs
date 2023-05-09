@@ -28,23 +28,22 @@ namespace TextRecognizer
                 }
             return bitmap;
         }
-        public static void SaveImage(string path, Bitmap bitmap)
+        public static void SaveImage(string name, Bitmap bitmap)
         {            
-            bitmap.Save(path + ".bmp");
+            bitmap.Save(AppDomain.CurrentDomain.BaseDirectory + "samples\\" + name + ".bmp");
         }
-        public static void SaveImage(string path, float[,] array)
+        public static void SaveImage(string name, float[,] array)
         {
             Bitmap bitmap = ArrayToBMP(array);
-            bitmap.Save(path +".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
+            bitmap.Save(AppDomain.CurrentDomain.BaseDirectory + "samples\\" + name + ".bmp", System.Drawing.Imaging.ImageFormat.Bmp);
         }
-
-        public static void CreateSamplesFolder(string path)
+        public static void CreateSamplesFolder()
         {
-            Directory.CreateDirectory(path);
+            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "samples\\");
         }
-        public static void DeleteSamplesFolder(string path)
+        public static void DeleteSamplesFolder()
         {
-            Directory.Delete(path, true);
+            Directory.Delete(AppDomain.CurrentDomain.BaseDirectory + "samples\\", true);
         }
     }
 }

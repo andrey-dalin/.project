@@ -33,11 +33,7 @@ namespace TextRecognizer
                 string symbol = Convert.ToChar(i).ToString();
                 this.Neurons[j] = new Neuron(symbol);
             }
-        }
-        public void MakePathForEveryone(string pathOfFolder)
-        {
-            foreach (Neuron neuron in Neurons) neuron.MakePathOfWeightBMP(neuron.name, pathOfFolder);
-        }
+        }        
         public void SetResolutionForEveryone()
         {
             foreach (Neuron neuron in Neurons) neuron.SetResolution(ResolutionX, ResolutionY);
