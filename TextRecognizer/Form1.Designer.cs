@@ -45,8 +45,10 @@
             this.toolStripComboScale = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripPlus = new System.Windows.Forms.ToolStripButton();
             this.toolStripMinus = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.toolStripLocalWeights = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -98,8 +100,8 @@
             this.splitContainer1.Panel2.AutoScroll = true;
             this.splitContainer1.Panel2.Controls.Add(this.pictureBox2);
             this.splitContainer1.Panel2.Controls.Add(this.label2);
-            this.splitContainer1.Size = new System.Drawing.Size(800, 349);
-            this.splitContainer1.SplitterDistance = 331;
+            this.splitContainer1.Size = new System.Drawing.Size(1403, 675);
+            this.splitContainer1.SplitterDistance = 579;
             this.splitContainer1.TabIndex = 10;
             // 
             // pictureBox1
@@ -138,11 +140,13 @@
             this.toolStripSeparator3,
             this.toolStripComboScale,
             this.toolStripPlus,
-            this.toolStripMinus});
+            this.toolStripMinus,
+            this.toolStripSave,
+            this.toolStripLocalWeights});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(800, 37);
+            this.toolStrip1.Size = new System.Drawing.Size(1403, 37);
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -237,6 +241,17 @@
             this.toolStripMinus.Text = "toolStripButton2";
             this.toolStripMinus.Click += new System.EventHandler(this.toolStripMinus_Click);
             // 
+            // toolStripSave
+            // 
+            this.toolStripSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripSave.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSave.Image")));
+            this.toolStripSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripSave.Name = "toolStripSave";
+            this.toolStripSave.Size = new System.Drawing.Size(328, 34);
+            this.toolStripSave.Text = "Сохранить результат обучения";
+            this.toolStripSave.Click += new System.EventHandler(this.toolStripSave_Click);
+            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Font = new System.Drawing.Font("Calibri", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -248,20 +263,31 @@
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 386);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 648);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(800, 64);
+            this.statusStrip1.Size = new System.Drawing.Size(1403, 64);
             this.statusStrip1.TabIndex = 11;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // toolStripLocalWeights
+            // 
+            this.toolStripLocalWeights.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripLocalWeights.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLocalWeights.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLocalWeights.Image")));
+            this.toolStripLocalWeights.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripLocalWeights.Name = "toolStripLocalWeights";
+            this.toolStripLocalWeights.Size = new System.Drawing.Size(262, 34);
+            this.toolStripLocalWeights.Text = "Начать с обученного ИИ";
+            this.toolStripLocalWeights.Click += new System.EventHandler(this.toolStripLocalWeights_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1403, 712);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.statusStrip1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
@@ -302,6 +328,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripButton toolStripSave;
+        private System.Windows.Forms.ToolStripButton toolStripLocalWeights;
     }
 }
 

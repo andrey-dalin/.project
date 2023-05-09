@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -20,7 +21,6 @@ namespace TextRecognizer
             int indexInArray = Array.FindIndex(Neurons, (Neuron neuron) => neuron.name == name);
             return Neurons[indexInArray];
         }
-
         public void NamingNeurons()
         {
             for (int i = 'а', j = 0; i <= 'я'; i++, j++)
@@ -34,17 +34,22 @@ namespace TextRecognizer
                 this.Neurons[j] = new Neuron(symbol);
             }
         }
-
         public void MakePathForEveryone(string pathOfFolder)
         {
             foreach (Neuron neuron in Neurons) neuron.MakePathOfWeightBMP(neuron.name, pathOfFolder);
         }
-
         public void SetResolutionForEveryone()
         {
             foreach (Neuron neuron in Neurons) neuron.SetResolution(ResolutionX, ResolutionY);
         }
-
+        public void SaveWeights()
+        {
+            foreach (Neuron neuron in Neurons) neuron.SaveWeights();
+        }
+        public void GetLocalWeights()
+        {
+            foreach (Neuron neuron in Neurons) neuron.GetLocalWeights();
+        }
         public void SetInput(Bitmap input)
         {
             if (input == null)
@@ -68,23 +73,20 @@ namespace TextRecognizer
                         }
                     }
         }
-
         public void FindMatches()
         {
             for (int i = 0; i < Neurons.Length; i++)
-                for (int y = 0; y < Neurons[0].weight.GetLength(0); y++)
-                    for (int x = 0; x < Neurons[0].weight.GetLength(1); x++)
+                for (int y = 0; y < ResolutionY; y++)
+                    for (int x = 0; x < ResolutionX; x++)
                         Neurons[i].matches[y, x] = Neurons[i].input[y, x] * Neurons[i].weight[y, x];
         }
-
         public void Sum()
         {
             for (int i = 0; i < Neurons.Length; i++)
-                for (int y = 0; y < Neurons[0].weight.GetLength(0); y++)
-                    for (int x = 0; x < Neurons[0].weight.GetLength(1); x++)
+                for (int y = 0; y < ResolutionY; y++)
+                    for (int x = 0; x < ResolutionX; x++)
                         Neurons[i].sumOfMatches += Neurons[i].matches[y, x];
         }
-
         public string GetAGuess()
         {
             int numberInArray;
@@ -118,7 +120,6 @@ namespace TextRecognizer
             Sum();
             return GetAGuess();
         }
-
         public void Train(string trueName, string falseName)
         {
             Trainer.IncrementWeight(trueName, Neurons);
@@ -127,6 +128,10 @@ namespace TextRecognizer
                 return;
             }
             Trainer.DecrementWeight(falseName, Neurons);
+        }
+        public void CreateWeightsFolder()
+        {
+            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\weights");
         }
     }
 }

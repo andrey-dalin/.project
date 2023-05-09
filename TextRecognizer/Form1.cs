@@ -23,16 +23,17 @@ namespace TextRecognizer
             MyInitialize();
             StartNeuronWeb();
             toolStripComboScale.SelectedIndex = 0;
-            InputLanguage.CurrentInputLanguage = InputLanguage.DefaultInputLanguage;
+            InputLanguage.CurrentInputLanguage = InputLanguage.FromCulture(System.Globalization.CultureInfo.GetCultureInfo("Ru"));
         }
         private string pathOfSamples = AppDomain.CurrentDomain.BaseDirectory + "samples\\";
         private int iterationOfSampleGroup;
-        private int startX, startY, endX, endY = 0;
+        private int startX, startY, endX, endY;
         private double scaleX;
         private double scaleY;
         private int scale = 100;
         private Bitmap inputPicture;
         private Bitmap weightPicture;
+        private Bitmap matchesPicture;
         private Graphics graphics;
         private Pen pen = new Pen(Color.Black, 30f);
         private NeuronWeb neuronWeb = new NeuronWeb();
@@ -46,7 +47,8 @@ namespace TextRecognizer
             WriteTrueSymbol,
             Trained,
             PictureClean,
-            PutRussianLayout
+            PutRussianLayout,
+            LocalWeight
         };
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
@@ -85,7 +87,7 @@ namespace TextRecognizer
 
             ToAnswer(answers.Guess);
 
-            ShowWeight(guess);
+            ShowMatches(guess);
             SaveSamples();
             
         }
@@ -217,23 +219,34 @@ namespace TextRecognizer
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Visualizer.DeleteSamplesFolder(pathOfSamples);
+            Sampler.DeleteSamplesFolder(pathOfSamples);
         }
-
+        private void toolStripSave_Click(object sender, EventArgs e)
+        {
+            neuronWeb.SaveWeights();
+        }
+        private void toolStripLocalWeights_Click(object sender, EventArgs e)
+        {
+            neuronWeb.GetLocalWeights();
+            ToAnswer(answers.LocalWeight);
+        }
         //private methods
         private void MyInitialize()
         {
             iterationOfSampleGroup = 0;
-            Visualizer.CreateSamplesFolder(pathOfSamples);
+            Sampler.CreateSamplesFolder(pathOfSamples);
+            neuronWeb.CreateWeightsFolder();
 
             inputPicture = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             weightPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+            matchesPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
 
             for (int x = 0; x < pictureBox1.Width; x++)
                 for (int y = 0; y < pictureBox1.Height; y++)
                 {
                     inputPicture.SetPixel(x, y, Color.White);
                     weightPicture.SetPixel(x, y, Color.White);
+                    matchesPicture.SetPixel(x, y, Color.White);
                 }
         
 
@@ -325,6 +338,14 @@ namespace TextRecognizer
 
                     toolStripStatusLabel1.BackColor = Color.OrangeRed;
                     break;
+
+                case answers.LocalWeight:
+                    toolStripStatusLabel1.Text = "ИИ: вы начали с обученного ИИ.";
+                    guess = string.Empty;
+                    toolStripTextBoxTrueSymbol.Text = string.Empty;
+
+                    toolStripStatusLabel1.BackColor = Color.Green;
+                    break;
             }
         }
         private void Clear()
@@ -340,19 +361,33 @@ namespace TextRecognizer
             weightPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
             Graphics g = Graphics.FromImage(weightPicture);
             RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
-            Bitmap weightInBMP = Visualizer.ArrayToBMP(neuronWeb.FindNeuron(symbol).weight);
+            Bitmap weightInBMP = Sampler.ArrayToBMP(neuronWeb.FindNeuron(symbol).weight);
             g.DrawImage(weightInBMP, rectangle);
             pictureBox2.Image = weightPicture;
+
+            label2.Text = "Веса буквы";
         }
+        private void ShowMatches(string symbol)
+        {
+            matchesPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
+            Graphics g = Graphics.FromImage(matchesPicture);
+            RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
+            Bitmap matchesInBMP = Sampler.ArrayToBMP(neuronWeb.FindNeuron(symbol).matches);
+            g.DrawImage(matchesInBMP, rectangle);
+            pictureBox2.Image = matchesPicture;
+
+            label2.Text = "Совпадающие пиксели";
+        }
+
         private void SaveSamples()
         {
             if (guess != string.Empty)
             {
                 Neuron tempNeuron = neuronWeb.FindNeuron(guess);
-                Visualizer.SaveImage(pathOfSamples + iterationOfSampleGroup + Visualizer.matchesSuffix, tempNeuron.matches);                
+                Sampler.SaveImage(pathOfSamples + iterationOfSampleGroup + Sampler.matchesSuffix, tempNeuron.matches);                
             }
-            Visualizer.SaveImage(pathOfSamples + iterationOfSampleGroup + Visualizer.inputSuffix, inputPicture);
-            Visualizer.SaveImage(pathOfSamples + iterationOfSampleGroup + Visualizer.weightSuffix, weightPicture);
+            Sampler.SaveImage(pathOfSamples + iterationOfSampleGroup + Sampler.inputSuffix, inputPicture);
+            Sampler.SaveImage(pathOfSamples + iterationOfSampleGroup + Sampler.weightSuffix, weightPicture);
             iterationOfSampleGroup++;
         }
     }
