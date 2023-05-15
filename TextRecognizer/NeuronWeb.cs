@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace TextRecognizer
 {
@@ -37,16 +35,7 @@ namespace TextRecognizer
         public void SetResolutionForEveryone()
         {
             foreach (Neuron neuron in Neurons) neuron.SetResolution(ResolutionX, ResolutionY);
-        }
-        public void SaveWeights()
-        {
-            Properties.Settings.Default.Weights = Neurons;
-            Properties.Settings.Default.Save();
-        }
-        public void GetLocalWeights()
-        {
-            Neurons = Properties.Settings.Default.Weights;
-        }
+        }     
         public void SetInput(Bitmap input)
         {
             if (input == null)
@@ -125,10 +114,6 @@ namespace TextRecognizer
                 return;
             }
             Trainer.DecrementWeight(falseName, Neurons);
-        }
-        public void CreateWeightsFolder()
-        {
-            Directory.CreateDirectory(AppDomain.CurrentDomain.BaseDirectory + "\\weights");
-        }
+        }        
     }
 }

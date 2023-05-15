@@ -45,8 +45,6 @@
             this.toolStripComboScale = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripPlus = new System.Windows.Forms.ToolStripButton();
             this.toolStripMinus = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSave = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLocalWeights = new System.Windows.Forms.ToolStripButton();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -140,9 +138,7 @@
             this.toolStripSeparator3,
             this.toolStripComboScale,
             this.toolStripPlus,
-            this.toolStripMinus,
-            this.toolStripSave,
-            this.toolStripLocalWeights});
+            this.toolStripMinus});
             this.toolStrip1.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.HorizontalStackWithOverflow;
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
@@ -223,45 +219,23 @@
             // 
             // toolStripPlus
             // 
-            this.toolStripPlus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripPlus.Image = global::TextRecognizer.Properties.Resources.zoomin_zoom_search_find_1531;
+            this.toolStripPlus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripPlus.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripPlus.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripPlus.Name = "toolStripPlus";
-            this.toolStripPlus.Size = new System.Drawing.Size(23, 34);
-            this.toolStripPlus.Text = "toolStripButton1";
+            this.toolStripPlus.Size = new System.Drawing.Size(29, 34);
+            this.toolStripPlus.Text = "+";
             this.toolStripPlus.Click += new System.EventHandler(this.toolStripPlus_Click);
             // 
             // toolStripMinus
             // 
-            this.toolStripMinus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripMinus.Image = global::TextRecognizer.Properties.Resources.zoomout_zoom_search_find_1530;
+            this.toolStripMinus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripMinus.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.toolStripMinus.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripMinus.Name = "toolStripMinus";
-            this.toolStripMinus.Size = new System.Drawing.Size(23, 34);
-            this.toolStripMinus.Text = "toolStripButton2";
+            this.toolStripMinus.Size = new System.Drawing.Size(24, 34);
+            this.toolStripMinus.Text = "-";
             this.toolStripMinus.Click += new System.EventHandler(this.toolStripMinus_Click);
-            // 
-            // toolStripSave
-            // 
-            this.toolStripSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripSave.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripSave.Image")));
-            this.toolStripSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripSave.Name = "toolStripSave";
-            this.toolStripSave.Size = new System.Drawing.Size(328, 34);
-            this.toolStripSave.Text = "Сохранить результат обучения";
-            this.toolStripSave.Click += new System.EventHandler(this.toolStripSave_Click);
-            // 
-            // toolStripLocalWeights
-            // 
-            this.toolStripLocalWeights.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripLocalWeights.Font = new System.Drawing.Font("Calibri", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripLocalWeights.Image = ((System.Drawing.Image)(resources.GetObject("toolStripLocalWeights.Image")));
-            this.toolStripLocalWeights.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripLocalWeights.Name = "toolStripLocalWeights";
-            this.toolStripLocalWeights.Size = new System.Drawing.Size(262, 34);
-            this.toolStripLocalWeights.Text = "Начать с обученного ИИ";
-            this.toolStripLocalWeights.Click += new System.EventHandler(this.toolStripLocalWeights_Click);
             // 
             // toolStripStatusLabel1
             // 
@@ -328,8 +302,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripSave;
-        private System.Windows.Forms.ToolStripButton toolStripLocalWeights;
     }
 }
 

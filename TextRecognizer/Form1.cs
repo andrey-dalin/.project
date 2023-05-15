@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Drawing.Text;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace TextRecognizer
 {
@@ -214,21 +206,11 @@ namespace TextRecognizer
         {
             Sampler.DeleteSamplesFolder();
         }
-        private void toolStripSave_Click(object sender, EventArgs e)
-        {
-            neuronWeb.SaveWeights();
-        }
-        private void toolStripLocalWeights_Click(object sender, EventArgs e)
-        {
-            neuronWeb.GetLocalWeights();
-            ToAnswer(answers.LocalWeight);
-        }
         //methods
         private void MyInitialize()
         {
             iterationOfSampleGroup = 0;
             Sampler.CreateSamplesFolder();
-            neuronWeb.CreateWeightsFolder();
 
             inputPicture = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             weightPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
