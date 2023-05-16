@@ -15,13 +15,11 @@ namespace TextRecognizer
             MyInitialize();
             StartNeuronWeb();
             toolStripComboScale.SelectedIndex = 0;
-            InputLanguage.CurrentInputLanguage = InputLanguage.FromCulture(System.Globalization.CultureInfo.GetCultureInfo("Ru"));
         }
         private int iterationOfSampleGroup;
         private int startX, startY, endX, endY;
         private double scaleX;
         private double scaleY;
-        private int scale = 100;
         private Bitmap inputPicture;
         private Bitmap weightPicture;
         private Bitmap matchesPicture;
@@ -117,7 +115,6 @@ namespace TextRecognizer
                     pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
                     pictureBox1.Dock = DockStyle.None;
                     pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-
                    
                     pictureBox2.SizeMode = PictureBoxSizeMode.Normal;
                     pictureBox2.Dock = DockStyle.None;
@@ -125,7 +122,6 @@ namespace TextRecognizer
 
                     toolStripPlus.Enabled = false;
                     toolStripMinus.Enabled = false;
-
 
                     scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                     scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
@@ -161,12 +157,8 @@ namespace TextRecognizer
                     toolStripPlus.Enabled = true;
                     toolStripMinus.Enabled = true;
 
-
                     scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                     scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-                    scale = 100;
-
                     break;
 
             }
@@ -183,8 +175,6 @@ namespace TextRecognizer
 
             scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
             scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-            scale = (int)(scale * 1.2);
         }
         private void toolStripMinus_Click(object sender, EventArgs e)
         {
@@ -198,8 +188,6 @@ namespace TextRecognizer
 
                 scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
                 scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-                scale = (int)(scale / 1.2);
             }
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
