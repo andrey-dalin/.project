@@ -22,16 +22,5 @@ namespace TextRecognizer.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public Neuron[] Weights {
-            get {
-                return ((Neuron[])(this["Weights"]));
-            }
-            set {
-                this["Weights"] = value;
-            }
-        }
     }
 }

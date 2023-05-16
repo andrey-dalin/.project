@@ -327,7 +327,7 @@ namespace TextRecognizer
             weightPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
             Graphics g = Graphics.FromImage(weightPicture);
             RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
-            Bitmap weightInBMP = Sampler.ArrayToBMP(neuronWeb.FindNeuron(symbol).weight);
+            Bitmap weightInBMP = Sampler.ArrayToBMP(neuronWeb.FindNeuron(symbol).weights);
             g.DrawImage(weightInBMP, rectangle);
             pictureBox2.Image = weightPicture;
 

@@ -7,17 +7,13 @@ namespace TextRecognizer
     public class NeuronWeb
     {
         public Neuron[] Neurons;
-
         public static int ResolutionX;
         public static int ResolutionY;
 
         public Neuron FindNeuron(string name)
         {
-            if (name == string.Empty)
-                throw new ArgumentNullException("name", "name is empty string");
-
-            int indexInArray = Array.FindIndex(Neurons, (Neuron neuron) => neuron.name == name);
-            return Neurons[indexInArray];
+            int index = Array.FindIndex(Neurons, (Neuron neuron) => neuron.name == name);
+            return Neurons[index];
         }
         public void NamingNeurons()
         {
@@ -25,11 +21,11 @@ namespace TextRecognizer
             {
                 if (i == 'ж')
                 {
-                    this.Neurons[j] = new Neuron("ё");
+                    Neurons[j] = new Neuron("ё");
                     j++;
                 }
                 string symbol = Convert.ToChar(i).ToString();
-                this.Neurons[j] = new Neuron(symbol);
+                Neurons[j] = new Neuron(symbol);
             }
         }        
         public void SetResolutionForEveryone()
@@ -38,9 +34,6 @@ namespace TextRecognizer
         }     
         public void SetInput(Bitmap input)
         {
-            if (input == null)
-                throw new ArgumentNullException("input", "SetInput is null");
-
            Bitmap scaledInput = new Bitmap(input, ResolutionX, ResolutionY);
 
             for (int i = 0; i < Neurons.Length; i++)
@@ -49,14 +42,8 @@ namespace TextRecognizer
                     {
                         float colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
 
-                        if (Neuron.IsWhite(colorOfPixel))
-                        {
-                            Neurons[i].input[y, x] = MyColors.White;
-                        }
-                        else
-                        {
-                            Neurons[i].input[y, x] = MyColors.Black;
-                        }
+                        if (Neuron.IsWhite(colorOfPixel)) Neurons[i].input[y, x] = MyColors.White;
+                        else Neurons[i].input[y, x] = MyColors.Black;
                     }
         }
         public void FindMatches()
@@ -64,7 +51,7 @@ namespace TextRecognizer
             for (int i = 0; i < Neurons.Length; i++)
                 for (int y = 0; y < ResolutionY; y++)
                     for (int x = 0; x < ResolutionX; x++)
-                        Neurons[i].matches[y, x] = Neurons[i].input[y, x] * Neurons[i].weight[y, x];
+                        Neurons[i].matches[y, x] = Neurons[i].input[y, x] * Neurons[i].weights[y, x];
         }
         public void Sum()
         {
@@ -75,25 +62,15 @@ namespace TextRecognizer
         }
         public string GetAGuess()
         {
-            int numberInArray;
-            float maxBlackInSums;
+            int index;
             float[] sums = new float[Neurons.Length];
-                       
-            for (int i = 0; i < Neurons.Length; i++)
-                sums[i] = Neurons[i].sumOfMatches;
 
-            maxBlackInSums = sums.Max();
+            for (int i = 0; i < Neurons.Length; i++) sums[i] = Neurons[i].sumOfMatches;
 
-            numberInArray = Array.FindIndex(sums, (float match) => match == maxBlackInSums);
-
-            if (Neurons[numberInArray].sumOfMatches >= Neurons[numberInArray].limit)
-            {
-                return Neurons[numberInArray].name;
-            }
-            else
-            {
-                return string.Empty;
-            }
+            index = Array.FindIndex(sums, (float match) => match == sums.Max());
+            
+            if (Neurons[index].sumOfMatches > Neurons[index].limit) return Neurons[index].name;
+            else return string.Empty;
           
         }
         public string Recognize(Bitmap input)
@@ -109,10 +86,8 @@ namespace TextRecognizer
         public void Train(string trueName, string falseName)
         {
             Trainer.IncrementWeight(trueName, Neurons);
-            if (falseName == string.Empty)
-            {
-                return;
-            }
+            if (falseName == string.Empty) return;
+
             Trainer.DecrementWeight(falseName, Neurons);
         }        
     }

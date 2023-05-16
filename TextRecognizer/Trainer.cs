@@ -11,15 +11,15 @@ namespace TextRecognizer
         {
             int indexOfNeuron = Array.FindIndex(neurons, x => x.name == name);
 
-            for (int y = 0; y < neurons[indexOfNeuron].weight.GetLength(0); y++) 
-                for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1);  x++)
+            for (int y = 0; y < neurons[indexOfNeuron].weights.GetLength(0); y++) 
+                for (int x = 0; x < neurons[indexOfNeuron].weights.GetLength(1);  x++)
                 {
-                    neurons[indexOfNeuron].weight[y, x] -= 
+                    neurons[indexOfNeuron].weights[y, x] -= 
                         neurons[indexOfNeuron].input[y, x] / Accuracy;
 
-                    if (neurons[indexOfNeuron].weight[y, x] <= 0)
+                    if (neurons[indexOfNeuron].weights[y, x] <= 0)
                     {
-                        neurons[indexOfNeuron].weight[y, x] = 0;
+                        neurons[indexOfNeuron].weights[y, x] = 0;
                     }
                 }
         }
@@ -28,15 +28,15 @@ namespace TextRecognizer
         {
             int indexOfNeuron = Array.FindIndex(neurons, x => x.name == name);
 
-            for (int y = 0; y < neurons[indexOfNeuron].weight.GetLength(0); y++)
-                for (int x = 0; x < neurons[indexOfNeuron].weight.GetLength(1); x++)
+            for (int y = 0; y < neurons[indexOfNeuron].weights.GetLength(0); y++)
+                for (int x = 0; x < neurons[indexOfNeuron].weights.GetLength(1); x++)
                 {
-                    neurons[indexOfNeuron].weight[y, x] +=
+                    neurons[indexOfNeuron].weights[y, x] +=
                         neurons[indexOfNeuron].input[y, x] / Accuracy;
 
-                    if (neurons[indexOfNeuron].weight[y, x] >= 1)
+                    if (neurons[indexOfNeuron].weights[y, x] >= 1)
                     {
-                        neurons[indexOfNeuron].weight[y, x] = 1;
+                        neurons[indexOfNeuron].weights[y, x] = 1;
                     }
                 }
         }
