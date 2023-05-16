@@ -13,8 +13,6 @@ namespace TextRecognizer
 
         public Neuron FindNeuron(string name)
         {
-            if (name == string.Empty)
-                throw new ArgumentNullException("name", "name is empty string");
 
             int indexInArray = Array.FindIndex(Neurons, (Neuron neuron) => neuron.name == name);
             return Neurons[indexInArray];
