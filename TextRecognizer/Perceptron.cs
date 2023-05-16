@@ -5,12 +5,12 @@ using System.Xml.Linq;
 
 namespace TextRecognizer
 {
-    public class NeuronWeb
+    public class Perceptron
     {
-        public Neuron[] Neurons;
-        public static int ResolutionX;
-        public static int ResolutionY;
-        public static float Accuracy = 10;
+        public Neuron[] Neurons = new Neuron[33];
+        public int ResolutionX = 30;
+        public int ResolutionY = 30;
+        public float Accuracy = 10;
 
         public Neuron FindNeuron(string name)
         {

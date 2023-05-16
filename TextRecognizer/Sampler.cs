@@ -16,7 +16,7 @@ namespace TextRecognizer
 
         public static Bitmap ArrayToBMP(float[,] array)
         {
-            Bitmap bitmap = new Bitmap(NeuronWeb.ResolutionX, NeuronWeb.ResolutionY);
+            Bitmap bitmap = new Bitmap(Perceptron.ResolutionX, Perceptron.ResolutionY);
 
             for (int y = 0; y < array.GetLength(0); y++)
                 for (int x = 0; x < array.GetLength(1); x++)

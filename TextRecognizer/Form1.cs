@@ -8,9 +8,6 @@ namespace TextRecognizer
     {
         public Form1()
         {
-
-            NeuronWeb.ResolutionX = 30;
-            NeuronWeb.ResolutionY = 30;
             InitializeComponent();
             MyInitialize();
             StartNeuronWeb();
@@ -25,10 +22,10 @@ namespace TextRecognizer
         private Bitmap matchesPicture;
         private Graphics graphics;
         private Pen pen = new Pen(Color.Black, 30f);
-        private NeuronWeb neuronWeb = new NeuronWeb();
+        private Perceptron neuronWeb = new Perceptron();
         private string guess = string.Empty;
 
-        private enum answers
+        private enum Answers
         {
             CannotGuess,
             Guess,
@@ -38,7 +35,7 @@ namespace TextRecognizer
             PictureClean,
             PutRussianLayout,
             LocalWeight
-        };
+        }
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             startX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
@@ -69,12 +66,12 @@ namespace TextRecognizer
 
             if (guess == string.Empty)
             {
-                ToAnswer(answers.CannotGuess);
+                ToAnswer(Answers.CannotGuess);
                 SaveSamples();
                 return;
             }
 
-            ToAnswer(answers.Guess);
+            ToAnswer(Answers.Guess);
 
             ShowMatches(guess);
             SaveSamples();
@@ -83,18 +80,18 @@ namespace TextRecognizer
         private void toolStripClean_Click(object sender, EventArgs e)
         {
             Clear();
-            ToAnswer(answers.PictureClean);
+            ToAnswer(Answers.PictureClean);
         }
         private void toolStripTrain_Click(object sender, EventArgs e)
         {
             if (toolStripTextBoxTrueSymbol.Text == string.Empty)
             {
-                ToAnswer(answers.WriteTrueSymbol);
+                ToAnswer(Answers.WriteTrueSymbol);
                 return;
             }
             if (Array.FindIndex(neuronWeb.Neurons, x => x.name == toolStripTextBoxTrueSymbol.Text.ToLower()) < 0)
             {
-                ToAnswer(answers.PutRussianLayout);
+                ToAnswer(Answers.PutRussianLayout);
                 return;
             }
 
@@ -103,7 +100,7 @@ namespace TextRecognizer
 
             ShowWeight(toolStripTextBoxTrueSymbol.Text.ToLower());
             SaveSamples();
-            ToAnswer(answers.Trained);
+            ToAnswer(Answers.Trained);
 
             Clear();            
         }
@@ -232,23 +229,21 @@ namespace TextRecognizer
         }
         private void StartNeuronWeb()
         {
-            int numberOfRussianLetters = 33;
-            neuronWeb.Neurons = new Neuron[numberOfRussianLetters];
             neuronWeb.NamingNeurons();
             neuronWeb.SetResolutionForEveryone();
         }
-        private void ToAnswer(answers answerOfNeuronWeb)
+        private void ToAnswer(Answers answerOfNeuronWeb)
         {
             switch (answerOfNeuronWeb)
             {
-                case answers.CannotGuess:
+                case Answers.CannotGuess:
                     toolStripStatusLabel1.Text = "ИИ: не могу угадать букву. Напишите правильную букву и нажмите обучить";
                     guess = string.Empty;
                     toolStripStatusLabel1.BackColor = Color.DeepPink;
                     toolStripTextBoxTrueSymbol.Focus();
                     break;
 
-                case answers.Guess:
+                case Answers.Guess:
                     toolStripStatusLabel1.Text = "ИИ: я думаю это буква" + " " + guess + ".";
                     if (guess == string.Empty)
                         throw new Exception("guess is empty string");
@@ -257,19 +252,19 @@ namespace TextRecognizer
                     toolStripTextBoxTrueSymbol.Focus();
                     break;
 
-                case answers.DrawSymbol:
+                case Answers.DrawSymbol:
                     toolStripStatusLabel1.Text = "ИИ: нарисуйте букву.";
                     guess = string.Empty;
                     toolStripStatusLabel1.BackColor = Color.OrangeRed;
                     break;
 
-                case answers.WriteTrueSymbol:
+                case Answers.WriteTrueSymbol:
                     toolStripStatusLabel1.Text = "ИИ: напишите правильную букву, чтобы обучить.";
                     guess = string.Empty;
                     toolStripStatusLabel1.BackColor = Color.OrangeRed;
                     break;
 
-                case answers.Trained:
+                case Answers.Trained:
                     toolStripStatusLabel1.Text = "ИИ: понял свои ошибки. Продолжайте рисовать.";
                     guess = string.Empty;
                     toolStripTextBoxTrueSymbol.Text = string.Empty;
@@ -277,7 +272,7 @@ namespace TextRecognizer
                     toolStripStatusLabel1.BackColor = Color.Orange;
                     break;
 
-                case answers.PictureClean:
+                case Answers.PictureClean:
                     toolStripStatusLabel1.Text = "ИИ: холст очищен. Начинайте рисовать.";
                     guess = string.Empty;
                     toolStripTextBoxTrueSymbol.Text = string.Empty;
@@ -285,7 +280,7 @@ namespace TextRecognizer
                     toolStripStatusLabel1.BackColor = Color.Green;
                     break;
 
-                case answers.PutRussianLayout:
+                case Answers.PutRussianLayout:
                     toolStripStatusLabel1.Text = "ИИ: поставьте русскую раскладку.";
                     guess = string.Empty;
                     toolStripTextBoxTrueSymbol.Text = string.Empty;
@@ -293,7 +288,7 @@ namespace TextRecognizer
                     toolStripStatusLabel1.BackColor = Color.OrangeRed;
                     break;
 
-                case answers.LocalWeight:
+                case Answers.LocalWeight:
                     toolStripStatusLabel1.Text = "ИИ: вы начали с обученного ИИ.";
                     guess = string.Empty;
                     toolStripTextBoxTrueSymbol.Text = string.Empty;
