@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Linq;
+using System.Xml.Linq;
 
 namespace TextRecognizer
 {
@@ -9,6 +10,7 @@ namespace TextRecognizer
         public Neuron[] Neurons;
         public static int ResolutionX;
         public static int ResolutionY;
+        public static float Accuracy = 10;
 
         public Neuron FindNeuron(string name)
         {
@@ -42,8 +44,8 @@ namespace TextRecognizer
                     {
                         float colorOfPixel = Convert.ToInt32(scaledInput.GetPixel(x, y).R);
 
-                        if (Neuron.IsWhite(colorOfPixel)) Neurons[i].input[y, x] = MyColors.White;
-                        else Neurons[i].input[y, x] = MyColors.Black;
+                        if (colorOfPixel > 250) Neurons[i].input[y, x] = 0;
+                        else Neurons[i].input[y, x] = 1;
                     }
         }
         public void FindMatches()
@@ -85,10 +87,21 @@ namespace TextRecognizer
         }
         public void Train(string trueName, string falseName)
         {
-            Trainer.IncrementWeight(trueName, Neurons);
-            if (falseName == string.Empty) return;
+            int indexOfTrueNeuron = Array.FindIndex(Neurons, x => x.name == trueName);
+            int indexOfFalseNeuron = Array.FindIndex(Neurons, x => x.name == falseName);
 
-            Trainer.DecrementWeight(falseName, Neurons);
-        }        
+            for (int y = 0; y < ResolutionY; y++)
+                for (int x = 0; x < ResolutionX; x++)
+                {
+                    Neurons[indexOfTrueNeuron].weights[y, x] += Neurons[indexOfTrueNeuron].input[y, x] / Accuracy;
+
+                    if (Neurons[indexOfTrueNeuron].weights[y, x] >= 1) Neurons[indexOfTrueNeuron].weights[y, x] = 1;
+
+                    if (falseName == string.Empty) return;
+                    Neurons[indexOfFalseNeuron].weights[y, x] -= Neurons[indexOfFalseNeuron].input[y, x] / Accuracy;
+
+                    if (Neurons[indexOfTrueNeuron].weights[y, x] <= 0) Neurons[indexOfTrueNeuron].weights[y, x] = 0;
+                }
+        }
     }
 }

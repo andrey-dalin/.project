@@ -19,10 +19,6 @@
             weights = new float[height, width];
             input = new float[height, width];
         }
-        public static bool IsWhite(float pixel)
-        {
-            return pixel > MyColors.NearWhite;
-        }
     }
 }
 
