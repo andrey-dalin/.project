@@ -22,7 +22,7 @@ namespace TextRecognizer
         private Bitmap matchesPicture;
         private Graphics graphics;
         private Pen pen = new Pen(Color.Black, 30f);
-        private Perceptron neuronWeb = new Perceptron();
+        private Perceptron perceptron = new Perceptron();
         private string guess = string.Empty;
 
         private enum Answers
@@ -62,7 +62,7 @@ namespace TextRecognizer
         }
         private void toolStripRecognize_Click(object sender, EventArgs e)
         {
-            guess = neuronWeb.Recognize(inputPicture);            
+            guess = perceptron.Recognize(inputPicture);            
 
             if (guess == string.Empty)
             {
@@ -89,14 +89,14 @@ namespace TextRecognizer
                 ToAnswer(Answers.WriteTrueSymbol);
                 return;
             }
-            if (Array.FindIndex(neuronWeb.Neurons, x => x.name == toolStripTextBoxTrueSymbol.Text.ToLower()) < 0)
+            if (Array.FindIndex(perceptron.Neurons, x => x.name == toolStripTextBoxTrueSymbol.Text.ToLower()) < 0)
             {
                 ToAnswer(Answers.PutRussianLayout);
                 return;
             }
 
-            neuronWeb.SetInput(inputPicture);
-            neuronWeb.Train(toolStripTextBoxTrueSymbol.Text.ToLower(), guess);
+            perceptron.SetInput(inputPicture);
+            perceptron.Train(toolStripTextBoxTrueSymbol.Text.ToLower(), guess);
 
             ShowWeight(toolStripTextBoxTrueSymbol.Text.ToLower());
             SaveSamples();
@@ -187,10 +187,6 @@ namespace TextRecognizer
                 scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
             }
         }
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            Sampler.DeleteSamplesFolder();
-        }
         //methods
         private void MyInitialize()
         {
@@ -229,8 +225,8 @@ namespace TextRecognizer
         }
         private void StartNeuronWeb()
         {
-            neuronWeb.NamingNeurons();
-            neuronWeb.SetResolutionForEveryone();
+            perceptron.NamingNeurons();
+            perceptron.SetResolutionForEveryone();
         }
         private void ToAnswer(Answers answerOfNeuronWeb)
         {
@@ -267,7 +263,6 @@ namespace TextRecognizer
                 case Answers.Trained:
                     toolStripStatusLabel1.Text = "ИИ: понял свои ошибки. Продолжайте рисовать.";
                     guess = string.Empty;
-                    toolStripTextBoxTrueSymbol.Text = string.Empty;
 
                     toolStripStatusLabel1.BackColor = Color.Orange;
                     break;
@@ -301,16 +296,14 @@ namespace TextRecognizer
         {
 
             graphics.Clear(Color.White);
-            pictureBox1.Image = inputPicture;
-            
-            
+            pictureBox1.Image = inputPicture;            
         }
         private void ShowWeight(string symbol)
         {
             weightPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
             Graphics g = Graphics.FromImage(weightPicture);
             RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
-            Bitmap weightInBMP = Sampler.ArrayToBMP(neuronWeb.FindNeuron(symbol).weights);
+            Bitmap weightInBMP = Sampler.ArrayToBMP(perceptron.FindNeuron(symbol).weights);
             g.DrawImage(weightInBMP, rectangle);
             pictureBox2.Image = weightPicture;
 
@@ -321,7 +314,7 @@ namespace TextRecognizer
             matchesPicture = new Bitmap(pictureBox2.Width, pictureBox2.Height);
             Graphics g = Graphics.FromImage(matchesPicture);
             RectangleF rectangle = new RectangleF(0f, 0f, pictureBox2.Width, pictureBox2.Height);
-            Bitmap matchesInBMP = Sampler.ArrayToBMP(neuronWeb.FindNeuron(symbol).matches);
+            Bitmap matchesInBMP = Sampler.ArrayToBMP(perceptron.FindNeuron(symbol).matches);
             g.DrawImage(matchesInBMP, rectangle);
             pictureBox2.Image = matchesPicture;
 
@@ -332,7 +325,7 @@ namespace TextRecognizer
         {
             if (guess != string.Empty)
             {
-                Neuron tempNeuron = neuronWeb.FindNeuron(guess);
+                Neuron tempNeuron = perceptron.FindNeuron(guess);
                 Sampler.SaveImage(iterationOfSampleGroup + Sampler.matchesSuffix, tempNeuron.matches);                
             }
             Sampler.SaveImage(iterationOfSampleGroup + Sampler.inputSuffix, inputPicture);

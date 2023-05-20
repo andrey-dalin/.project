@@ -53,7 +53,19 @@ namespace TextRecognizer
             for (int i = 0; i < Neurons.Length; i++)
                 for (int y = 0; y < ResolutionY; y++)
                     for (int x = 0; x < ResolutionX; x++)
+                    {
                         Neurons[i].matches[y, x] = Neurons[i].input[y, x] * Neurons[i].weights[y, x];
+                        int R = Convert.ToInt32(255 - Neurons[i].matches[y, x] * 255);
+                        int g = Convert.ToInt32(255 - Neurons[i].matches[y, x] * 255);
+                        if (R > 255)
+                        {
+                            throw new Exception();
+                        }
+                        if (g > 255)
+                        {
+                            throw new Exception();
+                        }
+                    }
         }
         public void Sum()
         {
@@ -97,10 +109,26 @@ namespace TextRecognizer
 
                     if (Neurons[indexOfTrueNeuron].weights[y, x] >= 1) Neurons[indexOfTrueNeuron].weights[y, x] = 1;
 
-                    if (falseName == string.Empty) return;
-                    Neurons[indexOfFalseNeuron].weights[y, x] -= Neurons[indexOfFalseNeuron].input[y, x] / Accuracy;
+                    if (falseName != string.Empty)
+                    {
+                        Neurons[indexOfFalseNeuron].weights[y, x] -= Neurons[indexOfFalseNeuron].input[y, x] / Accuracy;
 
-                    if (Neurons[indexOfTrueNeuron].weights[y, x] <= 0) Neurons[indexOfTrueNeuron].weights[y, x] = 0;
+                        if (Neurons[indexOfFalseNeuron].weights[y, x] <= 0) Neurons[indexOfFalseNeuron].weights[y, x] = 0;
+
+
+                        int g = Convert.ToInt32(255 - Neurons[indexOfFalseNeuron].weights[y, x] * 255);
+
+                        if (g > 255)
+                        {
+                            throw new Exception();
+                        }
+                    }
+
+                    int R = Convert.ToInt32(255 - Neurons[indexOfTrueNeuron].weights[y, x] * 255);
+                    if (R > 255)
+                    {
+                        throw new Exception();
+                    }
                 }
         }
     }
