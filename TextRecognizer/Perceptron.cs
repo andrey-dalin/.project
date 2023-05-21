@@ -93,15 +93,19 @@ namespace TextRecognizer
             for (int y = 0; y < ResolutionY; y++)
                 for (int x = 0; x < ResolutionX; x++)
                 {
-                    Neurons[indexOfTrueNeuron].weights[y, x] += Neurons[indexOfTrueNeuron].input[y, x] / Accuracy;
+                    Neurons[indexOfTrueNeuron].weights[y, x] += 
+                        Neurons[indexOfTrueNeuron].input[y, x] / Accuracy;
 
-                    if (Neurons[indexOfTrueNeuron].weights[y, x] >= 1) Neurons[indexOfTrueNeuron].weights[y, x] = 1;
+                    if (Neurons[indexOfTrueNeuron].weights[y, x] >= 1) 
+                        Neurons[indexOfTrueNeuron].weights[y, x] = 1;
 
                     if (falseName != string.Empty)
                     {
-                        Neurons[indexOfFalseNeuron].weights[y, x] -= Neurons[indexOfFalseNeuron].input[y, x] / Accuracy;
+                        Neurons[indexOfFalseNeuron].weights[y, x] -= 
+                            Neurons[indexOfFalseNeuron].input[y, x] / Accuracy;
 
-                        if (Neurons[indexOfFalseNeuron].weights[y, x] <= 0) Neurons[indexOfFalseNeuron].weights[y, x] = 0;
+                        if (Neurons[indexOfFalseNeuron].weights[y, x] <= 0)
+                            Neurons[indexOfFalseNeuron].weights[y, x] = 0;
                     }
                 }
         }

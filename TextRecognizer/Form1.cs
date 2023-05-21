@@ -11,12 +11,8 @@ namespace TextRecognizer
             InitializeComponent();
             MyInitialize();
             StartNeuronWeb();
-            toolStripComboScale.SelectedIndex = 0;
         }
         private int iterationOfSampleGroup;
-        private int startX, startY, endX, endY;
-        private double scaleX;
-        private double scaleY;
         private Bitmap inputPicture;
         private Bitmap weightPicture;
         private Bitmap matchesPicture;
@@ -36,28 +32,13 @@ namespace TextRecognizer
             PutRussianLayout,
             LocalWeight
         }
-        private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
-        {
-            startX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
-            startY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
-        }
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 graphics = Graphics.FromImage(inputPicture);
-                endX = Convert.ToInt32(Math.Ceiling(scaleX * e.X));
-                endY = Convert.ToInt32(Math.Ceiling(scaleY * e.Y));
-                Point start = new Point(startX, startY);
-                Point end = new Point(endX, endY);
-                if (startX != 0 & startY != 0)
-                {
-                    graphics.DrawLine(pen, start, end);
-                    pictureBox1.Image = inputPicture;
-                    startX = endX;
-                    startY = endY;
-                }
-
+                graphics.DrawLine(pen, e.X - 1, e.Y - 1, e.X, e.Y);
+                pictureBox1.Image = inputPicture;
             }
         }
         private void toolStripRecognize_Click(object sender, EventArgs e)
@@ -104,89 +85,6 @@ namespace TextRecognizer
 
             Clear();            
         }
-        private void toolStripComboScale_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            switch (toolStripComboScale.SelectedIndex)
-            {
-                case 0:
-                    pictureBox1.SizeMode = PictureBoxSizeMode.Normal;
-                    pictureBox1.Dock = DockStyle.None;
-                    pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-                   
-                    pictureBox2.SizeMode = PictureBoxSizeMode.Normal;
-                    pictureBox2.Dock = DockStyle.None;
-                    pictureBox2.BorderStyle = BorderStyle.FixedSingle;
-
-                    toolStripPlus.Enabled = false;
-                    toolStripMinus.Enabled = false;
-
-                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-                    break;
-
-                case 1:
-                    pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-                    pictureBox1.Dock = DockStyle.Fill;
-
-                    pictureBox2.SizeMode = PictureBoxSizeMode.StretchImage;
-                    pictureBox2.Dock = DockStyle.Fill;
-                    pictureBox2.BorderStyle = BorderStyle.FixedSingle;
-
-                    toolStripPlus.Enabled = false;
-                    toolStripMinus.Enabled = false;
-
-
-                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-
-                    break;
-
-                case 2:
-                    pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
-                    pictureBox1.Dock = DockStyle.None;
-                    pictureBox1.BorderStyle = BorderStyle.FixedSingle;
-
-                    pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
-                    pictureBox2.Dock = DockStyle.None;
-                    pictureBox2.BorderStyle = BorderStyle.FixedSingle;
-
-                    toolStripPlus.Enabled = true;
-                    toolStripMinus.Enabled = true;
-
-                    scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-                    scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-                    break;
-
-            }
-        }
-        private void toolStripPlus_Click(object sender, EventArgs e)
-        {
-
-
-            pictureBox1.Width = (int)(pictureBox1.Width * 1.2);
-            pictureBox1.Height = (int)(pictureBox1.Height * 1.2);
-
-            pictureBox2.Width = (int)(pictureBox2.Width * 1.2);
-            pictureBox2.Height = (int)(pictureBox2.Height * 1.2);
-
-            scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-            scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-        }
-        private void toolStripMinus_Click(object sender, EventArgs e)
-        {
-            if (pictureBox1.Width > 12 & pictureBox1.Height > 12)
-            {
-                pictureBox1.Width = (int)(pictureBox1.Width / 1.2);
-                pictureBox1.Height = (int)(pictureBox1.Height / 1.2);
-
-                pictureBox2.Width = (int)(pictureBox2.Width / 1.2);
-                pictureBox2.Height = (int)(pictureBox2.Height / 1.2);
-
-                scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-                scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
-            }
-        }
         //methods
         private void MyInitialize()
         {
@@ -209,12 +107,6 @@ namespace TextRecognizer
             pictureBox1.Image = inputPicture;
             pictureBox2.Image = weightPicture;
             graphics = Graphics.FromImage(inputPicture);
-
-            pictureBox1.Size = inputPicture.Size;
-            pictureBox2.Size = inputPicture.Size;
-
-            scaleX = (double)pictureBox1.Image.Width / pictureBox1.Bounds.Width;
-            scaleY = (double)pictureBox1.Image.Height / pictureBox1.Bounds.Height;
 
             graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
             graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
