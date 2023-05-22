@@ -8,8 +8,8 @@ namespace TextRecognizer
     public class Perceptron
     {
         public Neuron[] Neurons = new Neuron[33];
-        public static int ResolutionX = 30;
-        public static int ResolutionY = 30;
+        public static int ResolutionX = 400;
+        public static int ResolutionY = 400;
         public float Accuracy = 10;
 
         public Neuron FindNeuron(string name)

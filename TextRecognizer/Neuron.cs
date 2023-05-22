@@ -7,7 +7,7 @@
         public float[,] weights;
         public float[,] matches;
         public float sumOfMatches;
-        public float limit = 180;
+        public float limit = 32000;
 
         public Neuron(string name)
         {

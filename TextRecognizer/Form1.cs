@@ -224,6 +224,11 @@ namespace TextRecognizer
             Sampler.SaveImage(iterationOfSampleGroup + Sampler.weightSuffix, weightPicture);
             iterationOfSampleGroup++;
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Sampler.DeleteSamplesFolder();
+        }
     }
 }
 
