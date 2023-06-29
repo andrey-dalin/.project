@@ -81,8 +81,8 @@ namespace TextRecognizer
             SetInput(input);
             //Ассоциативный слой
             FindMatches();
-            //Реагирующий слой
             Sum();
+            //Реагирующий слой
             return GetAGuess();
         }
         public void Train(string trueName, string falseName)
