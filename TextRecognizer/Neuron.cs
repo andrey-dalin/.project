@@ -1,55 +1,24 @@
-﻿using System.Collections.Generic;
-using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
-namespace TextRecognizer
+﻿namespace TextRecognizer
 {
     public class Neuron
     {
         public string name;
-        public string pathToBMP;
-        public int[,] matches;
-        public int[,] weight;
-        public int[,] input;
-        public int sumOfMatches;
-        public bool hasPath;
+        public float[,] input;
+        public float[,] weights;
+        public float[,] matches;
+        public float sumOfMatches;
+        public float limit = 32000;
 
         public Neuron(string name)
         {
             this.name = name;
         }
-
-        public void MakePathBMPOfWeight(string name, string pathOfFolder)
-        {
-            if (hasPath == false)
-            {
-                pathToBMP = @pathOfFolder + "\\" + name + ".bmp";
-                //File.Create(@"A:\Andrey\.project\TextRecognizer\resource\letters\" + name + ".bmp").Close();             
-
-                hasPath = true;
-            }
-        }
-
         public void SetResolution(int width, int height)
         {
-            matches = new int[height, width];
-            weight = new int[height, width];
-            input = new int[height, width];
-        }
-
-        public static int IsWhite(int pixel)
-        {
-            if (pixel > MyColors.NearWhite)
-            {
-                return 0;
-            }
-            else
-            {
-                return 1;
-            }
+            matches = new float[height, width];
+            weights = new float[height, width];
+            input = new float[height, width];
         }
     }
 }
+
